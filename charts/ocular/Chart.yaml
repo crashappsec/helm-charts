@@ -8,7 +8,7 @@
 
 apiVersion: v2
 name: ocular
-version: 0.1.0
+version: 0.1.1
 kubeVersion: ">=1.26.0-0"
 description: A Helm chart for mass scanning static software assets
 type: application
@@ -26,4 +26,4 @@ sources:
 maintainers:
   - name: Bryce Thuiot
     email: bryce@crashoverride.com
-appVersion: 0.0.0-beta.3
+appVersion: 0.0.0-alpha.1
