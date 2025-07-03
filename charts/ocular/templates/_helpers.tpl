@@ -76,14 +76,14 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- define "images.api-server" }}
 {{- $registry := .Values.images.registry | default "ghcr.io" -}}
 {{- $repo := .Values.images.repositories.apiServer| default "crashappsec/ocular-api-server" -}}
-{{- $tag := .Values.images.tagOverride | default .Chart.AppVersion -}}
+{{- $tag := .Values.images.tagOverride | default (printf "v%s" .Chart.AppVersion) -}}
 {{- printf "%s/%s:%s" $registry $repo $tag -}}
 {{- end }}
 
 {{- define "images.extractor" }}
 {{- $registry := .Values.images.registry | default "ghcr.io" -}}
 {{- $repo := .Values.images.repositories.extractor -}}
-{{- $tag := .Values.images.tagOverride | default .Chart.AppVersion -}}
+{{- $tag := .Values.images.tagOverride | default (printf "v%s" .Chart.AppVersion) -}}
 {{- printf "%s/%s:%s" $registry $repo $tag -}}
 {{- end }}
 
