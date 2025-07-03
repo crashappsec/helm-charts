@@ -1,0 +1,105 @@
+# Copyright (C) 2025 Crash Override, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the FSF, either version 3 of the License, or (at your option) any later version.
+# See the LICENSE file in the root of this repository for full license text or
+# visit: <https://www.gnu.org/licenses/gpl-3.0.html>.
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "ocular.fullname" . }}-config
+  labels:
+    {{- include "ocular.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    environment: {{ .Values.environment | quote }}
+    api:
+      host: {{ include "ocular.fullname" . }}-api.{{ .Release.Namespace }}.svc.cluster.local
+      port: {{ .Values.api.service.port }}
+
+    # TODO: TLS support from cluster ceritficate
+
+    runtime:
+      labels:
+        {{- toYaml .Values.global.labels | nindent 8 }}
+      {{- if .Values.images.pullSecrets }}
+      imagePullSecrets:
+        {{- range .Values.images.pullSecrets }}
+        - {{ .name | quote }}
+        {{- end }}
+      jobTTL: {{ .Values.api.runtime.jobTTL | quote }}
+
+      uploadersServiceAccount: {{ .Values.api.runtime.uploadersServiceAccount | quote }}
+      scannersServiceAccount: {{ .Values.api.runtime.scannersServiceAccount | quote }}
+      crawlersServiceAccount: {{ .Values.api.runtime.crawlersServiceAccount | quote }}
+      {{- end }}
+
+
+    extractor:
+      image: {{ include "images.extractor" . }}
+      imagePullPolicy: {{ .Values.images.pullPolicy }}
+
+    downloaders:
+     configMapName: {{ include "ocular.fullname" . }}-downloaders
+    crawlers:
+     configMapName: {{ include "ocular.fullname" . }}-crawlers
+    uploaders:
+     configMapName: {{ include "ocular.fullname" . }}-uploaders
+
+    logging:
+      {{ toYaml .Values.api.logging | nindent 6 }}
+
+    clusterAccess:
+      serviceAccount:
+        enabled: {{ .Values.api.clusterAccess.serviceAccount.enabled }}
+        namespace: {{ include "ocular.serviceaccount.namespace" . }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "ocular.fullname" . }}-secrets
+  labels:
+    {{- include "ocular.labels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "ocular.fullname" . }}-profiles
+  labels:
+    {{- include "ocular.labels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "ocular.fullname" . }}-uploaders
+  labels:
+    {{- include "ocular.labels" . | nindent 4 }}
+{{- if .Values.includeDefaultResources }}
+data:
+  {{- include "uploaders.defaults" . | nindent 2}}
+{{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "ocular.fullname" . }}-crawlers
+  labels:
+    {{- include "ocular.labels" . | nindent 4 }}
+{{- if .Values.includeDefaultResources }}
+data:
+  {{ include "crawlers.defaults" . | nindent 2}}
+{{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "ocular.fullname" . }}-downloaders
+  labels:
+    {{- include "ocular.labels" . | nindent 4 }}
+{{- if .Values.includeDefaultResources }}
+data:
+  {{ include "downloaders.defaults" . | nindent 2}}
+{{- end }}

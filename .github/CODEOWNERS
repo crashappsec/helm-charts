@@ -1,0 +1,11 @@
+##########
+# Ocular #
+##########
+
+charts/ocular/      @crashappsec/ocular
+hack/scripts/ocular @crashappsec/ocular
+
+###########
+# Default #
+###########
+*	                @crashappsec/eng
