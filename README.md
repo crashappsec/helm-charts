@@ -6,8 +6,18 @@ The charts are hosted using GitHub pages from the branch [`gh-pages`](../../tree
 
 ## Available Charts
 
-| Chart                      | Current Version | Description                             | Documentation    |
-|----------------------------|-----------------|-----------------------------------------|------------------|
-| [`ocular`](/charts/ocular) | `v0.0.0`        | [Ocular](crashappsec/ocular) deployment | [Artifact Hub]() |
+| Chart                      | Current Version | Description                             | Documentation      |
+|----------------------------|-----------------|-----------------------------------------|--------------------|
+| [`ocular`](/charts/ocular) | `v0.2.0`        | [Ocular](crashappsec/ocular) deployment | ~~[Artifact Hub]()~~ |
 
+## Installing Charts
+
+```bash
+helm repo add crashoverride https://crashappsec.github.io/helm-charts
+# To update use
+# helm repo update crashoverride
+
+# Install a chart (for example ocular)
+helm install ocular crashoverride/ocular
+```
 
