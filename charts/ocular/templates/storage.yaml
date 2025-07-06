@@ -69,7 +69,7 @@ metadata:
   name: {{ include "ocular.fullname" . }}-uploaders
   labels:
     {{- include "ocular.labels" . | nindent 4 }}
-{{- if .Values.includeDefaultResources }}
+{{- if .Values.defaultResources.include }}
 data:
   {{- include "uploaders.defaults" . | nindent 2}}
 {{- end }}
@@ -80,7 +80,7 @@ metadata:
   name: {{ include "ocular.fullname" . }}-crawlers
   labels:
     {{- include "ocular.labels" . | nindent 4 }}
-{{- if .Values.includeDefaultResources }}
+{{- if .Values.defaultResources.include }}
 data:
   {{ include "crawlers.defaults" . | nindent 2}}
 {{- end }}
@@ -91,7 +91,7 @@ metadata:
   name: {{ include "ocular.fullname" . }}-downloaders
   labels:
     {{- include "ocular.labels" . | nindent 4 }}
-{{- if .Values.includeDefaultResources }}
+{{- if .Values.defaultResources.include }}
 data:
   {{ include "downloaders.defaults" . | nindent 2}}
 {{- end }}

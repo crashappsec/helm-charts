@@ -1,3 +1,8 @@
+{{/*
+This file is auto generated
+DO NOT EDIT
+*/}}
+
 {{- define "crawlers.defaults" -}}
 
 github: |
@@ -48,7 +53,7 @@ gitlab: |
 
 {{- end }}
 
-{{- define "downloader.defaults" -}}
+{{- define "downloaders.defaults" -}}
 
 docker: |
   image: ghcr.io/crashappsec/ocular-default-integrations:v0.0.0-alpha.1
