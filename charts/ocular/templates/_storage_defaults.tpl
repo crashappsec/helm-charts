@@ -6,7 +6,7 @@ DO NOT EDIT
 {{- define "crawlers.defaults" -}}
 
 github: |
-  image: ghcr.io/crashappsec/ocular-default-integrations:v0.0.0-alpha.1
+  image: ghcr.io/crashappsec/ocular-default-crawlers:v0.0.0-alpha.1
   secrets:
       - name: github-token
         mountType: envVar
@@ -27,7 +27,7 @@ github: |
           default: 1m
 
 gitlab: |
-  image: ghcr.io/crashappsec/ocular-default-integrations:v0.0.0-alpha.1
+  image: ghcr.io/crashappsec/ocular-default-crawlers:v0.0.0-alpha.1
   secrets:
       - name: gitlab-token
         mountType: envVar
@@ -56,7 +56,7 @@ gitlab: |
 {{- define "downloaders.defaults" -}}
 
 docker: |
-  image: ghcr.io/crashappsec/ocular-default-integrations:v0.0.0-alpha.1
+  image: ghcr.io/crashappsec/ocular-default-downloaders:v0.0.0-alpha.1
   secrets:
       - name: downloader-dockerconfig
         mountType: file
@@ -66,27 +66,27 @@ docker: |
         value: /etc/docker
 
 gcs: |
-  image: ghcr.io/crashappsec/ocular-default-integrations:v0.0.0-alpha.1
+  image: ghcr.io/crashappsec/ocular-default-downloaders:v0.0.0-alpha.1
   secrets:
       - name: downloader-gcs-credentials
         mountType: file
         mountTarget: GOOGLE_APPLICATION_CREDENTIALS
 
 git: |
-  image: ghcr.io/crashappsec/ocular-default-integrations:v0.0.0-alpha.1
+  image: ghcr.io/crashappsec/ocular-default-downloaders:v0.0.0-alpha.1
   secrets:
       - name: git-config
         mountType: file
         mountTarget: /etc/gitconfig
 
 npm: |
-  image: ghcr.io/crashappsec/ocular-default-integrations:v0.0.0-alpha.1
+  image: ghcr.io/crashappsec/ocular-default-downloaders:v0.0.0-alpha.1
 
 pypi: |
-  image: ghcr.io/crashappsec/ocular-default-integrations:v0.0.0-alpha.1
+  image: ghcr.io/crashappsec/ocular-default-downloaders:v0.0.0-alpha.1
 
 s3: |
-  image: ghcr.io/crashappsec/ocular-default-integrations:v0.0.0-alpha.1
+  image: ghcr.io/crashappsec/ocular-default-downloaders:v0.0.0-alpha.1
   secrets:
       - name: downloader-aws-config
         mountType: file
@@ -100,7 +100,7 @@ s3: |
 {{- define "uploaders.defaults" -}}
 
 s3: |
-  image: ghcr.io/crashappsec/ocular-default-integrations:v0.0.0-alpha.1
+  image: ghcr.io/crashappsec/ocular-default-uploaders:v0.0.0-alpha.1
   secrets:
       - name: uploader-awsconfig
         mountType: file
@@ -117,7 +117,7 @@ s3: |
           required: false
 
 webhook: |
-  image: ghcr.io/crashappsec/ocular-default-integrations:v0.0.0-alpha.1
+  image: ghcr.io/crashappsec/ocular-default-uploaders:v0.0.0-alpha.1
   parameters:
       METHOD:
           description: The HTTP method to use for the webhook request. Defaults to PUT.
