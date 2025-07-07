@@ -3,6 +3,31 @@ entries:
   ocular:
   - apiVersion: v2
     appVersion: 0.0.0-alpha.1
+    created: "2025-07-07T12:43:06.601666191Z"
+    description: A Helm chart for mass scanning static software assets
+    digest: 7c4b916ed2c76db0ea8334b1ec15b87a9ea45569dbe30e91513f841575e27de7
+    home: https://github.com/crashappsec/ocular
+    keywords:
+    - git
+    - kubernetes
+    - scanning
+    - sast
+    - secrets
+    - sca
+    - security
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: bryce@crashoverride.com
+      name: Bryce Thuiot
+    name: ocular
+    sources:
+    - https://github.com/crashappsec/ocular
+    type: application
+    urls:
+    - ocular-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: 0.0.0-alpha.1
     created: "2025-07-06T19:29:49.890855658Z"
     description: A Helm chart for mass scanning static software assets
     digest: bbeab63888eb6e5526fec0978983e5319526901a7b0c825e60fbceffe0e3a12d
@@ -51,4 +76,4 @@ entries:
     urls:
     - ocular-0.2.0.tgz
     version: 0.2.0
-generated: "2025-07-06T19:29:49.890914368Z"
+generated: "2025-07-07T12:43:06.601678374Z"
