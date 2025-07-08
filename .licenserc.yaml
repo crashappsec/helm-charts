@@ -21,6 +21,7 @@ header:
 
   paths:
     - '*.yaml'
+    - '*.yml'
     - '**/*.sh'
     - '**/Makefile'
 
