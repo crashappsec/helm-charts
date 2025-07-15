@@ -27,3 +27,6 @@ maintainers:
   - name: Bryce Thuiot
     email: bryce@crashoverride.com
 appVersion: 0.0.0-alpha.1
+annotations:
+  artifacthub.io/category: security
+  artifacthub.io/license: GPL-3.0
