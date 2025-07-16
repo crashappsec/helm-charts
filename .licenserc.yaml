@@ -20,7 +20,8 @@ header:
       visit: <https://www.gnu.org/licenses/gpl-3.0.html>.
 
   paths:
-    - '**/*.yaml'
+    - '*.yaml'
+    - '*.yml'
     - '**/*.sh'
     - '**/Makefile'
 

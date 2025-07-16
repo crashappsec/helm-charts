@@ -6,7 +6,7 @@
 # See the LICENSE file in the root of this repository for full license text or
 # visit: <https://www.gnu.org/licenses/gpl-3.0.html>.
 
-# Default values for Zeteo helm chart.
+# Default values for Ocular helm chart.
 nameOverride: ""
 fullnameOverride: ""
 

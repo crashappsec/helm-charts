@@ -8,9 +8,9 @@
 
 apiVersion: v2
 name: ocular
-version: 0.1.0
+version: 0.3.0
 kubeVersion: ">=1.26.0-0"
-description: A Helm chart for mass scanning static software assets
+description: An API for mass scanning static software assets
 type: application
 keywords:
   - git
@@ -20,10 +20,13 @@ keywords:
   - secrets
   - sca
   - security
-home: https://github.com/crashappsec/ocular
+home: https://ocularproject.io
 sources:
   - https://github.com/crashappsec/ocular
 maintainers:
   - name: Bryce Thuiot
     email: bryce@crashoverride.com
-appVersion: 0.0.0-beta.3
+appVersion: 0.1.0
+annotations:
+  artifacthub.io/category: security
+  artifacthub.io/license: GPL-3.0

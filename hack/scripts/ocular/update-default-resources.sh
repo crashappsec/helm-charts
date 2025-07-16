@@ -77,6 +77,11 @@ esac
 
 definitions=$(download_release "$release_identifier")
 
+echo "{{/*
+This file is auto generated
+DO NOT EDIT
+*/}}
+"
 
 for resource_definitions in "$definitions"/*; do
     resource_defaults=""
