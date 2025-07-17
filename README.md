@@ -10,7 +10,7 @@ The charts are hosted using GitHub pages from the branch [`gh-pages`](../../tree
 
 | Chart                      | Current Version | Description                             | Documentation      |
 |----------------------------|-----------------|-----------------------------------------|--------------------|
-| [`ocular`](/charts/ocular) | `v0.3.1`        | [Ocular](crashappsec/ocular) deployment | [Artifact Hub](https://artifacthub.io/packages/helm/crashoverride-helm-charts/ocular) |
+| [`ocular`](/charts/ocular) | `v0.3.2`        | [Ocular](crashappsec/ocular) deployment | [Artifact Hub](https://artifacthub.io/packages/helm/crashoverride-helm-charts/ocular) |
 
 ## Installing Charts
 
