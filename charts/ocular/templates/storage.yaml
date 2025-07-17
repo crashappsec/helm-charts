@@ -23,12 +23,12 @@ data:
         {{- range .Values.images.pullSecrets }}
         - {{ .name | quote }}
         {{- end }}
+      {{- end }}
       jobTTL: {{ .Values.api.runtime.jobTTL | quote }}
 
       uploadersServiceAccount: {{ .Values.api.runtime.uploadersServiceAccount | quote }}
       scannersServiceAccount: {{ .Values.api.runtime.scannersServiceAccount | quote }}
       crawlersServiceAccount: {{ .Values.api.runtime.crawlersServiceAccount | quote }}
-      {{- end }}
 
 
     extractor:
