@@ -6,6 +6,34 @@ entries:
       artifacthub.io/license: GPL-3.0
     apiVersion: v2
     appVersion: 0.1.1
+    created: "2025-07-31T16:25:20.081886871Z"
+    description: An API for mass scanning static software assets
+    digest: 7a3ce082d656286577babfe12ad039d70dae0dd8e594bb14bb3ce198fab900ec
+    home: https://ocularproject.io
+    keywords:
+    - git
+    - kubernetes
+    - scanning
+    - sast
+    - secrets
+    - sca
+    - security
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: bryce@crashoverride.com
+      name: Bryce Thuiot
+    name: ocular
+    sources:
+    - https://github.com/crashappsec/ocular
+    type: application
+    urls:
+    - ocular-0.3.3.tgz
+    version: 0.3.3
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/license: GPL-3.0
+    apiVersion: v2
+    appVersion: 0.1.1
     created: "2025-07-17T11:40:21.974401721Z"
     description: An API for mass scanning static software assets
     digest: af531aa9f643a7cdb0847315173350827299cc5ca27b2f20ed2518f01cf5ca22
@@ -160,4 +188,4 @@ entries:
     urls:
     - ocular-0.2.0.tgz
     version: 0.2.0
-generated: "2025-07-17T11:40:21.974420376Z"
+generated: "2025-07-31T16:25:20.081911757Z"
