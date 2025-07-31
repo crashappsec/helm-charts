@@ -20,8 +20,6 @@ fmt-license:
 	@echo "Formatting license headers ..."
 	@license-eye header fix
 
-
-
 .PHONY: ocular-update-defaults
 
 OCULAR_DEFAULTS_VERSION ?= latest
