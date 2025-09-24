@@ -1,0 +1,149 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+    annotations:
+        {{- if .Values.certManager.enable }}
+        cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/ocular-serving-cert
+        {{- end }}
+    name: ocular-validating-webhook-configuration
+webhooks:
+    - admissionReviewVersions:
+        - v1
+      clientConfig:
+        service:
+            name: ocular-webhook-service
+            namespace: {{ .Release.Namespace }}
+            path: /validate-ocular-crashoverride-run-v1beta1-crawler
+      failurePolicy: Fail
+      name: vcrawler-v1beta1.ocular.crashoverride.run
+      rules:
+        - apiGroups:
+            - ocular.crashoverride.run
+          apiVersions:
+            - v1beta1
+          operations:
+            - DELETE
+            - UPDATE
+          resources:
+            - crawlers
+      sideEffects: None
+    - admissionReviewVersions:
+        - v1
+      clientConfig:
+        service:
+            name: ocular-webhook-service
+            namespace: {{ .Release.Namespace }}
+            path: /validate-ocular-crashoverride-run-v1beta1-cronsearch
+      failurePolicy: Fail
+      name: vcronsearch-v1beta1.ocular.crashoverride.run
+      rules:
+        - apiGroups:
+            - ocular.crashoverride.run
+          apiVersions:
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - cronsearches
+      sideEffects: None
+    - admissionReviewVersions:
+        - v1
+      clientConfig:
+        service:
+            name: ocular-webhook-service
+            namespace: {{ .Release.Namespace }}
+            path: /validate-ocular-crashoverride-run-v1beta1-downloader
+      failurePolicy: Fail
+      name: vdownloader-v1beta1.ocular.crashoverride.run
+      rules:
+        - apiGroups:
+            - ocular.crashoverride.run
+          apiVersions:
+            - v1beta1
+          operations:
+            - DELETE
+          resources:
+            - downloaders
+      sideEffects: None
+    - admissionReviewVersions:
+        - v1
+      clientConfig:
+        service:
+            name: ocular-webhook-service
+            namespace: {{ .Release.Namespace }}
+            path: /validate-ocular-crashoverride-run-v1beta1-pipeline
+      failurePolicy: Fail
+      name: vpipeline-v1beta1.ocular.crashoverride.run
+      rules:
+        - apiGroups:
+            - ocular.crashoverride.run
+          apiVersions:
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - pipelines
+      sideEffects: None
+    - admissionReviewVersions:
+        - v1
+      clientConfig:
+        service:
+            name: ocular-webhook-service
+            namespace: {{ .Release.Namespace }}
+            path: /validate-ocular-crashoverride-run-v1beta1-profile
+      failurePolicy: Fail
+      name: vprofile-v1beta1.ocular.crashoverride.run
+      rules:
+        - apiGroups:
+            - ocular.crashoverride.run
+          apiVersions:
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+            - DELETE
+          resources:
+            - profiles
+      sideEffects: None
+    - admissionReviewVersions:
+        - v1
+      clientConfig:
+        service:
+            name: ocular-webhook-service
+            namespace: {{ .Release.Namespace }}
+            path: /validate-ocular-crashoverride-run-v1beta1-search
+      failurePolicy: Fail
+      name: vsearch-v1beta1.ocular.crashoverride.run
+      rules:
+        - apiGroups:
+            - ocular.crashoverride.run
+          apiVersions:
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - searches
+      sideEffects: None
+    - admissionReviewVersions:
+        - v1
+      clientConfig:
+        service:
+            name: ocular-webhook-service
+            namespace: {{ .Release.Namespace }}
+            path: /validate-ocular-crashoverride-run-v1beta1-uploader
+      failurePolicy: Fail
+      name: vuploader-v1beta1.ocular.crashoverride.run
+      rules:
+        - apiGroups:
+            - ocular.crashoverride.run
+          apiVersions:
+            - v1beta1
+          operations:
+            - DELETE
+            - UPDATE
+          resources:
+            - uploaders
+      sideEffects: None

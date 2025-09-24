@@ -6,13 +6,13 @@
 # See the LICENSE file in the root of this repository for full license text or
 # visit: <https://www.gnu.org/licenses/gpl-3.0.html>.
 
+OCULAR_REPOSITORY_ROOT ?= ../ocular
+
+
 ###############
 # Development #
 ###############
-.PHONY: clean fmt fmt-license
-
-clean:
-	@rm -rf "$$TMPDIR"/ocular-default-integrations-*
+.PHONY: fmt fmt-license
 
 fmt: fmt-license
 
@@ -20,8 +20,6 @@ fmt-license:
 	@echo "Formatting license headers ..."
 	@license-eye header fix
 
-.PHONY: ocular-update-defaults
-
-OCULAR_DEFAULTS_VERSION ?= latest
-ocular-update-defaults:
-	@hack/scripts/ocular/update-default-resources.sh ${OCULAR_DEFAULTS_VERSION} > ./charts/ocular/templates/_storage_defaults.tpl
+.PHONY: generate-ocular-helm-chart
+generate-ocular-helm-chart:
+	@hack/scripts/ocular/generate-helm-chart.sh --repository ${OCULAR_REPOSITORY_ROOT}

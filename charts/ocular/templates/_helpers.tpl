@@ -1,89 +1,87 @@
 {{/*
-Copyright (C) 2025 Crash Override, Inc.
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the FSF, either version 3 of the License, or (at your option) any later version.
-See the LICENSE file in the root of this repository for full license text or
-visit: <https://www.gnu.org/licenses/gpl-3.0.html>.
+Chart name based on project name.
+Truncated to 63 characters for Kubernetes compatibility.
 */}}
-
-
-{{/* Expand the name of the chart. */}}
-{{- define "ocular.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- define "chart.name" -}}
+{{- if .Chart }}
+  {{- if .Chart.Name }}
+    {{- .Chart.Name | trunc 63 | trimSuffix "-" }}
+  {{- else }}
+    ocular
+  {{- end }}
+{{- else }}
+  ocular
+{{- end }}
 {{- end }}
 
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
+Full name of the chart (with release name prefix).
+Combines release name with chart name.
+Truncated to 63 characters for Kubernetes compatibility.
 */}}
-{{- define "ocular.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- define "chart.fullname" -}}
+{{- $name := include "chart.name" . }}
 {{- if contains $name .Release.Name }}
 {{- .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- else }}
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 {{- end }}
+
+{{/*
+Namespace for generated references.
+Always uses the Helm release namespace.
+*/}}
+{{- define "chart.namespaceName" -}}
+{{ .Release.Namespace }}
 {{- end }}
 
-{{- define "ocular.serviceaccount.namespace" -}}
-{{- if .Values.api.serviceAccount.namespace }}
-{{- .Values.serviceAccount.namespace | quote }}
-{{- else }}
-{{- .Release.Namespace | quote }}
-{{- end }}
+
+
+{{/*
+Service name with proper truncation for Kubernetes 63-character limit.
+Takes a context with .suffix for the service type (e.g., "webhook-service").
+If fullname + suffix exceeds 63 chars, truncates fullname to 45 chars.
+*/}}
+{{- define "chart.serviceName" -}}
+{{- $fullname := include "chart.fullname" .context -}}
+{{- if gt (len $fullname) 45 -}}
+{{- printf "%s-%s" (trunc 45 $fullname | trimSuffix "-") .suffix | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" $fullname .suffix | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 {{- end }}
 
 {{/*
-Create chart name and version as used by the chart label.
+Common labels for Helm charts.
+Includes app version, chart version, app name, instance, and managed-by labels.
 */}}
-{{- define "ocular.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Common labels
-*/}}
-{{- define "ocular.labels" -}}
-helm.sh/chart: {{ include "ocular.chart" . }}
-{{ include "ocular.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
+{{- define "chart.labels" -}}
+{{- if .Chart.AppVersion -}}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
+{{- if .Chart.Version }}
+helm.sh/chart: {{ .Chart.Version | quote }}
+{{- end }}
+app.kubernetes.io/name: {{ include "chart.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- if .Values.global.labels }}
-{{- with .Values.global.labels }}
-{{ toYaml . }}
-{{- end }}
-{{- end }}
 {{- end }}
 
 {{/*
-Selector labels
+Selector labels for matching pods and services.
+Only includes name and instance for consistent selection.
 */}}
-{{- define "ocular.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "ocular.name" . }}
+{{- define "chart.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "chart.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-
-{{- define "images.api-server" }}
-{{- $registry := .Values.images.registry | default "ghcr.io" -}}
-{{- $repo := .Values.images.repositories.apiServer| default "crashappsec/ocular-api-server" -}}
-{{- $tag := .Values.images.tagOverride | default (printf "v%s" .Chart.AppVersion) -}}
-{{- printf "%s/%s:%s" $registry $repo $tag -}}
+{{- define "manager.image.tag" -}}
+{{- $tagDefault := .Chart.AppVersion | default "latest" -}}
+{{- .Values.controllerManager.image.tagOverride | default $tagDefault -}}
 {{- end }}
 
-{{- define "images.extractor" }}
-{{- $registry := .Values.images.registry | default "ghcr.io" -}}
-{{- $repo := .Values.images.repositories.extractor -}}
-{{- $tag := .Values.images.tagOverride | default (printf "v%s" .Chart.AppVersion) -}}
-{{- printf "%s/%s:%s" $registry $repo $tag -}}
+{{- define "manager.imageURI" -}}
+{{- printf "%s:v%s" .Values.controllerManager.image.repository (include "manager.image.tag" .)  -}}
 {{- end }}
-
