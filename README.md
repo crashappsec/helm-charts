@@ -21,6 +21,8 @@ helm repo add crashoverride https://crashappsec.github.io/helm-charts
 # helm repo update crashoverride
 
 # Install a chart (for example ocular)
-helm install ocular crashoverride/ocular
+helm install ocular crashoverride/ocular \
+	--namespace ocular-system \
+	--create-namespace
 ```
 

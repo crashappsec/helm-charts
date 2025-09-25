@@ -35,11 +35,11 @@ spec:
                   command:
                     - /manager
                   env:
-                    - name: OCULAR_MANAGER_IMAGE
-                      value: {{ include "manager.imageURI" . }}
+                    - name: OCULAR_CONTROLLER_IMG
+                      value: ghcr.io/crashappsec/ocular-controller:v0.2.0
                     - name: OCULAR_SEARCH_CLUSTER_ROLE
                       value: ocular-search-cluster-role
-                  image:  {{ include "manager.imageURI" . }}
+                  image: "{{ .Values.controllerManager.image.repository }}:{{ .Values.controllerManager.image.tag }}"
                   livenessProbe:
                     httpGet:
                         path: /healthz

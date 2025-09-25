@@ -8,6 +8,8 @@
 
 OCULAR_REPOSITORY_ROOT ?= ../ocular
 
+OCULAR_VERSION ?= latest
+export OCULAR_VERSION
 
 ###############
 # Development #

@@ -13,12 +13,12 @@ REPO_ROOT=$(readlink -f "$SCRIPT_DIR/../../../")
 
 set -e
 
-OCULAR_REPO_ROOT=$(readlink -f "$REPO_ROOT/../ocular/")
+OCULAR_DI_REPO_ROOT=$(readlink -f "$REPO_ROOT/../ocular-default-integrations/")
 
 while [[ $# -gt 0 ]]; do
   case $1 in
     -r|--repository)
-      OCULAR_REPO_ROOT="$(readlink -f "$2")"
+      OCULAR_DI_REPO_ROOT="$(readlink -f "$2")"
       shift
       shift
       ;;
@@ -29,30 +29,29 @@ while [[ $# -gt 0 ]]; do
 done
 
 
-if [ ! -d "$OCULAR_REPO_ROOT" ]; then
-    echo "'$OCULAR_REPO_ROOT' is not a directory"
+if [ ! -d "$OCULAR_DI_REPO_ROOT" ]; then
+    echo "'$OCULAR_DI_REPO_ROOT' is not a directory"
 fi
 
-go_module=$(cd "$OCULAR_REPO_ROOT" &>/dev/null && go list)
+go_module=$(cd "$OCULAR_DI_REPO_ROOT" 2>&1 1>/dev/null && go list)
 
-if [ ! "$go_module" = "github.com/crashappsec/ocular" ]; then
-    echo "ERROR: path '$(pwd)' is not the ocular repository root" >&2
+if [ ! "$go_module" = "github.com/crashappsec/ocular-default-integrations" ]; then
+    echo "ERROR: path '$(pwd)' is not the ocular default integrations repository root" >&2
     exit 1
 fi
 
 # first clean the existing chart from the ocular repository
-make -C "$OCULAR_REPO_ROOT" clean-helm
+make -C "$OCULAR_DI_REPO_ROOT" clean-helm
 
 # Then we copy in the current chart from this repository, then run
 # the 'build-helm' target.
 # This is done because the kubebuilder command has logic of which existing
 # files to update and which to leave alone, and the helm-chart plugin
 # will read/write to the folder 'dist/chart' within the repository
-cp -r "$REPO_ROOT/charts/ocular/" "$OCULAR_REPO_ROOT/dist/chart/"
+cp -r "$REPO_ROOT/charts/ocular/" "$OCULAR_DI_REPO_ROOT/dist/chart/"
 
-make -C "$OCULAR_REPO_ROOT" build-helm
+make -C "$OCULAR_DI_REPO_ROOT" build-helm
 
 # Once the files are updated, copy them back
 rm -rf "$REPO_ROOT/charts/ocular"
-cp -r "$OCULAR_REPO_ROOT/dist/chart/" "$REPO_ROOT/charts/ocular/"
-
+cp -r "$OCULAR_DI_REPO_ROOT/dist/chart/" "$REPO_ROOT/charts/ocular/"
