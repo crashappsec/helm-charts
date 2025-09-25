@@ -48,10 +48,10 @@ make -C "$OCULAR_DI_REPO_ROOT" clean-helm
 # This is done because the kubebuilder command has logic of which existing
 # files to update and which to leave alone, and the helm-chart plugin
 # will read/write to the folder 'dist/chart' within the repository
-cp -r "$REPO_ROOT/charts/ocular/" "$OCULAR_DI_REPO_ROOT/dist/chart/"
+cp -r "$REPO_ROOT/charts/ocular-default-integrations/" "$OCULAR_DI_REPO_ROOT/dist/chart/"
 
 make -C "$OCULAR_DI_REPO_ROOT" build-helm
 
 # Once the files are updated, copy them back
-rm -rf "$REPO_ROOT/charts/ocular"
-cp -r "$OCULAR_DI_REPO_ROOT/dist/chart/" "$REPO_ROOT/charts/ocular/"
+rm -rf "$REPO_ROOT/charts/ocular-default-integrations"
+cp -r "$OCULAR_DI_REPO_ROOT/dist/chart/" "$REPO_ROOT/charts/ocular-default-integrations/"

@@ -8,8 +8,13 @@
 
 OCULAR_REPOSITORY_ROOT ?= ../ocular
 
-OCULAR_VERSION ?= latest
+OCULAR_DI_REPOSITORY_ROOT ?= ../ocular-default-integrations
+
+OCULAR_VERSION ?= v0.2.0
 export OCULAR_VERSION
+
+OCULAR_DEFAULTS_VERSION ?= v0.1.2
+export OCULAR_DEFAULTS_VERSION
 
 ###############
 # Development #
@@ -25,3 +30,7 @@ fmt-license:
 .PHONY: generate-ocular-helm-chart
 generate-ocular-helm-chart:
 	@hack/scripts/ocular/generate-helm-chart.sh --repository ${OCULAR_REPOSITORY_ROOT}
+
+.PHONY: generate-ocular-default-integrations-helm-chart
+generate-ocular-default-integrations-helm-chart:
+	@hack/scripts/ocular-default-integrations/generate-helm-chart.sh --repository ${OCULAR_DI_REPOSITORY_ROOT}
