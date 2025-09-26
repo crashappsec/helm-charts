@@ -2,7 +2,7 @@
 apiVersion: ocular.crashoverride.run/v1beta1
 kind: Crawler
 metadata:
-  name: static-list
+  name: ocular-defaults-static-list
 spec:
   container:
     image: '{{ .Values.crawlers.image.repository }}:{{ .Values.crawlers.image.tag }}'

@@ -2,7 +2,7 @@
 apiVersion: ocular.crashoverride.run/v1beta1
 kind: Uploader
 metadata:
-  name: webhook
+  name: ocular-defaults-webhook
 spec:
   container:
     image: '{{ .Values.uploaders.image.repository }}:{{ .Values.uploaders.image.tag }}'

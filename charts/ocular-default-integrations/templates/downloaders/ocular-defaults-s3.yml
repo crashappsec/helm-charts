@@ -2,7 +2,7 @@
 apiVersion: ocular.crashoverride.run/v1beta1
 kind: Downloader
 metadata:
-  name: s3
+  name: ocular-defaults-s3
 spec:
   container:
     env:
