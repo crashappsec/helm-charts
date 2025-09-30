@@ -5,6 +5,34 @@ entries:
       artifacthub.io/category: security
       artifacthub.io/license: GPL-3.0
     apiVersion: v2
+    appVersion: 0.2.0
+    created: "2025-09-30T16:13:36.034708368Z"
+    description: An API for mass scanning static software assets
+    digest: e9e4a8c873d03eb7aaa143c5b6dc471ee3957508b86c7b6946650ce7d1a3937b
+    home: https://ocularproject.io
+    keywords:
+    - git
+    - kubernetes
+    - scanning
+    - sast
+    - secrets
+    - sca
+    - security
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: bryce@crashoverride.com
+      name: Bryce Thuiot
+    name: ocular
+    sources:
+    - https://github.com/crashappsec/ocular
+    type: application
+    urls:
+    - ocular-0.4.0.tgz
+    version: 0.4.0
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/license: GPL-3.0
+    apiVersion: v2
     appVersion: 0.1.1
     created: "2025-07-31T16:25:20.081886871Z"
     description: An API for mass scanning static software assets
@@ -188,4 +216,33 @@ entries:
     urls:
     - ocular-0.2.0.tgz
     version: 0.2.0
-generated: "2025-07-31T16:25:20.081911757Z"
+  ocular-default-integrations:
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/license: GPL-3.0
+    apiVersion: v2
+    appVersion: 0.1.2
+    created: "2025-09-30T16:13:36.232716236Z"
+    description: A Helm chart for deploying default ocular integrations
+    digest: 96f0406c09d1b98477850d581bba294835c349a76af17bcac607511f9870ccb9
+    home: https://ocularproject.io
+    keywords:
+    - git
+    - kubernetes
+    - scanning
+    - sast
+    - secrets
+    - sca
+    - security
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: bryce@crashoverride.com
+      name: Bryce Thuiot
+    name: ocular-default-integrations
+    sources:
+    - https://github.com/crashappsec/ocular-default-integrations
+    type: application
+    urls:
+    - ocular-default-integrations-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-09-30T16:13:36.232754898Z"
