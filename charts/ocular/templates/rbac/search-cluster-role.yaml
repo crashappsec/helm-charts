@@ -1,0 +1,17 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+    name: ocular-search-cluster-role
+rules:
+    - apiGroups:
+        - ocular.crashoverride.run
+      resources:
+        - pipelines
+        - searches
+      verbs:
+        - get
+        - list
+        - create
+        - update
+        - patch
+        - delete

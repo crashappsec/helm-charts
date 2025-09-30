@@ -1,0 +1,28 @@
+{{- if .Values.rbacHelpers.enable }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+    labels:
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+        app.kubernetes.io/name: ocular
+    name: ocular-search-editor-role
+rules:
+    - apiGroups:
+        - ocular.crashoverride.run
+      resources:
+        - searches
+      verbs:
+        - create
+        - delete
+        - get
+        - list
+        - patch
+        - update
+        - watch
+    - apiGroups:
+        - ocular.crashoverride.run
+      resources:
+        - searches/status
+      verbs:
+        - get
+{{- end }}

@@ -1,0 +1,21 @@
+---
+apiVersion: ocular.crashoverride.run/v1beta1
+kind: Downloader
+metadata:
+  name: ocular-defaults-git
+spec:
+  container:
+    image: '{{ .Values.downloaders.image.repository }}:{{ .Values.downloaders.image.tag }}'
+    name: git
+    resources: {}
+    volumeMounts:
+      - mountPath: /etc/gitconfig
+        name: downloaders-git-file-secrets
+        readOnly: true
+        subPath: gitconfig
+  volumes:
+    - name: downloaders-git-file-secrets
+      secret:
+        optional: true
+        secretName: downloaders-secrets
+status: {}

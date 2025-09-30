@@ -1,0 +1,124 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    labels:
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+        app.kubernetes.io/name: ocular
+        control-plane: controller-manager
+    name: ocular-controller-manager
+    namespace: {{ .Release.Namespace }}
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app.kubernetes.io/name: ocular
+            control-plane: controller-manager
+    template:
+        metadata:
+            annotations:
+                kubectl.kubernetes.io/default-container: manager
+            labels:
+                app.kubernetes.io/name: ocular
+                control-plane: controller-manager
+        spec:
+            affinity:
+                nodeAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                        nodeSelectorTerms:
+                            - matchExpressions:
+                                - key: kubernetes.io/arch
+                                  operator: In
+                                  values:
+                                    - amd64
+                                    - arm64
+                                    - ppc64le
+                                    - s390x
+                                - key: kubernetes.io/os
+                                  operator: In
+                                  values:
+                                    - linux
+            containers:
+                - args:
+                    - --metrics-bind-address=:8443
+                    - --leader-elect
+                    - --health-probe-bind-address=:8081
+                    {{- if and .Values.certManager.enable .Values.metrics.enable }}
+                    - --metrics-cert-path=/tmp/k8s-metrics-server/metrics-certs
+                    {{- end }}
+                    {{- if .Values.certManager.enable }}
+                    - --webhook-cert-path=/tmp/k8s-webhook-server/serving-certs
+                    {{- end }}
+                  command:
+                    - /manager
+                  env:
+                    - name: OCULAR_EXTRACTOR_IMG
+                      value: {{ .Values.controllerManager.image.repository }}:{{ .Values.controllerManager.image.tag }}
+                    - name: OCULAR_SEARCH_CLUSTER_ROLE
+                      value: ocular-search-cluster-role
+                  image: "{{ .Values.controllerManager.image.repository }}:{{ .Values.controllerManager.image.tag }}"
+                  livenessProbe:
+                    httpGet:
+                        path: /healthz
+                        port: 8081
+                    initialDelaySeconds: 15
+                    periodSeconds: 20
+                  name: manager
+                  ports:
+                    - containerPort: 9443
+                      name: webhook-server
+                      protocol: TCP
+                  readinessProbe:
+                    httpGet:
+                        path: /readyz
+                        port: 8081
+                    initialDelaySeconds: 5
+                    periodSeconds: 10
+                  resources:
+                    limits:
+                        cpu: 500m
+                        memory: 128Mi
+                    requests:
+                        cpu: 10m
+                        memory: 64Mi
+                  securityContext:
+                    allowPrivilegeEscalation: false
+                    capabilities:
+                        drop:
+                            - ALL
+                    readOnlyRootFilesystem: true
+                  volumeMounts:
+                    {{- if and .Values.certManager.enable .Values.metrics.enable }}
+                    - mountPath: /tmp/k8s-metrics-server/metrics-certs
+                      name: metrics-certs
+                      readOnly: true
+                    {{- end }}
+                    {{- if .Values.certManager.enable }}
+                    - mountPath: /tmp/k8s-webhook-server/serving-certs
+                      name: webhook-certs
+                      readOnly: true
+                    {{- end }}
+            securityContext:
+                runAsNonRoot: true
+                seccompProfile:
+                    type: RuntimeDefault
+            serviceAccountName: ocular-controller-manager
+            terminationGracePeriodSeconds: 10
+            volumes:
+                {{- if and .Values.certManager.enable .Values.metrics.enable }}
+                - name: metrics-certs
+                  secret:
+                    items:
+                        - key: ca.crt
+                          path: ca.crt
+                        - key: tls.crt
+                          path: tls.crt
+                        - key: tls.key
+                          path: tls.key
+                    optional: false
+                    secretName: metrics-server-cert
+                {{- end }}
+                {{- if .Values.certManager.enable }}
+                - name: webhook-certs
+                  secret:
+                    secretName: webhook-server-cert
+                {{- end }}

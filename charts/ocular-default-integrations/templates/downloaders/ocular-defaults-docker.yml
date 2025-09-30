@@ -1,0 +1,23 @@
+apiVersion: ocular.crashoverride.run/v1beta1
+kind: Downloader
+metadata:
+  name: ocular-defaults-docker
+spec:
+  container:
+    env:
+      - name: DOCKER_CONFIG
+        value: /ocular/docker
+    image: '{{ .Values.downloaders.image.repository }}:{{ .Values.downloaders.image.tag }}'
+    name: docker
+    resources: {}
+    volumeMounts:
+      - mountPath: /ocular/docker/config.json
+        name: downloaders-docker-file-secrets
+        readOnly: true
+        subPath: dockerconfig
+  volumes:
+    - name: downloaders-docker-file-secrets
+      secret:
+        optional: true
+        secretName: downloaders-secrets
+status: {}

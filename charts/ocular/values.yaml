@@ -1,138 +1,52 @@
-# Copyright (C) 2025 Crash Override, Inc.
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the FSF, either version 3 of the License, or (at your option) any later version.
-# See the LICENSE file in the root of this repository for full license text or
-# visit: <https://www.gnu.org/licenses/gpl-3.0.html>.
+# Configure the controller manager deployment
+controllerManager:
+  replicas: 1
+  image:
+    repository: "ghcr.io/crashappsec/ocular-controller"
+    tag: "v0.2.0"
+    pullPolicy: "IfNotPresent"
+  # Pod-level security settings
+  podSecurityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+  # Container-level security settings
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+  # Resource limits and requests
+  resources:
+    limits:
+      cpu: 500m
+      memory: 128Mi
+    requests:
+      cpu: 10m
+      memory: 64Mi
+# Essential RBAC permissions (required for controller operation)
+# These include ServiceAccount, controller permissions, leader election, and metrics access
+# Note: Essential RBAC is always enabled as it's required for the controller to function
 
-# Default values for Ocular helm chart.
-nameOverride: ""
-fullnameOverride: ""
-
-global:
-  labels: {}
-  annotations: {}
-
-environment: production  # can be: development, staging, production
-
-defaultResources:
-  include: true  # You can disable the default resources
-
-images:
-  pullPolicy: IfNotPresent  # Pull policy for images, can be: Always, Never, IfNotPresent
-  registry: ghcr.io  # Docker registry host
-  pullSecrets: []  # List of image pull secrets, if any
-  repositories:  # the repositories for each of the images
-    apiServer: crashappsec/ocular-api-server
-    extractor: crashappsec/ocular-extractor
-  # Docker image tag, can be set to "latest" or a specific version
-  # if not set, it will default to the app version of the chart
-  tagOverride: ""
-
-downloaders:
-  # can set the name of the config map that stores downloader definitions
-  configMapName: "ocular-downloaders-storage"
-
-crawlers:
-  # can set the name of the config map that stores downloader definitions
-  configMapName: "ocular-crawlers-storage"
-
-uploaders:
-  # can set the name of the config map that stores downloader defintions
-  configMapName: "ocular-uploaders-storage"
-
-profiles:
-  # can set the name of the config map that stores profile definitions
-  configMapName: "ocular-profiles-storage"
-
-secrets:
-  # can set the name of the secret that stores the secrets for the API server
-  secretName: "ocular-secrets-storage"
-
-# This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
-userAccounts:
-  # Full access service account to use for the API server
-  admin:
-    name: "ocular-admin"
-    create: true
-    annotations: {}
-  # Operator service account to use for the API server
-  # Operators have full read access and can additionally run pipelines, crawlers, and schedule crawlers
-  operator:
-    name: "ocular-operator"
-    create: true
-    annotations: {} # Annotations to add to the service account
-
-# Details on the API
-api:
-  runtime:
-    jobTTL: 5m  # This is the time to live for jobs, after this time they will be deleted
-    # crawlersServiceAccount: "ocular-crawler-sa" # This is the service account that will be used for crawlers, if not set it will use the default service account
-    # uploadersServiceAccount: "ocular-uploader-sa" # This is the service account that will be used for uploaders, if not set it will use the default service account
-    # scannersServiceAccount: "ocular-scanner-sa" # This is the service account that will be used for scanners, if not set it will use the default service account
-    # limits: # Set limits for the jobs that are run by the API server, this is useful for limiting resource usage
-    #   cpu: 100m
-    #   memory: 128Mi
-    # requests: # Set requests for the jobs that are run by the API server, this is useful for ensuring that the jobs have enough resources to run
-    #   cpu: 100m
-    #   memory: 128Mi
-  logging:
-    level: info  # can be: debug, info, warn, error
-    format: json
-  replicaCount: 1
-  clusterAccess:
-    serviceAccount:
-      enabled: true  # If true, will load the context from the "in-cluster" service account
-      namespace: ""  # This is the namespace that the in-cluster service account, if empty it will use the current namespace
-    kubeconfigSecretName: ""  # Optional, if set, this will be the name of the secret that contains the kubeconfig for the API server to use,
-
-  # Service for the API
-  service:
-    port: 3001  # This is the port that the service will listen on, can be set to any port
-    type: ClusterIP  # This sets the service type, can be set to ClusterIP, NodePort, LoadBalancer, etc.
-
-  # Details about the service account used by the API server
-  serviceAccount:
-    name: "ocular-api-sa"
-    create: true
-    annotations: { }
-
-queue:
-  enabled: true # Enable the queue for the API server
-  maxJobs: 50
-
-# This block is for setting up the ingress for more information can be found here:
-# https://kubernetes.io/docs/concepts/services-networking/ingress/
-ingress:
-  enabled: false  # Set this to true to enable
-  # className is used to specify the ingress class, if not set it will use the default ingress class
-  className: ""
-  # This is the ingress annotations, can be used to set up things like TLS, authentication, etc.
-  annotations: {}
-
-  hosts:
-    - host: ocular.crashoverride.run
-      paths:
-        - path: /
-          pathType: Prefix
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
-
-# This section is for setting up autoscaling more information can be found here:
-# https://kubernetes.io/docs/concepts/workloads/autoscaling/
-autoscaling:
-  enabled: false
-  # minReplicas: 1
-  # maxReplicas: 100
-  # targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
+# Helper RBAC roles for managing custom resources
+# These provide convenient admin/editor/viewer roles for each CRD type
+# Useful for giving users different levels of access to your custom resources
+rbacHelpers:
+  enable: false # Install convenience admin/editor/viewer roles for CRDs
+# Custom Resource Definitions
+crd:
+  enable: true # Install CRDs with the chart
+  keep: true # Keep CRDs when uninstalling
+# Controller metrics endpoint.
+# Enable to expose /metrics endpoint with RBAC protection.
+metrics:
+  enable: true
+# Cert-manager integration for TLS certificates.
+# Required for webhook certificates and metrics endpoint certificates.
+certManager:
+  enable: true
+# Prometheus ServiceMonitor for metrics scraping.
+# Requires prometheus-operator to be installed in the cluster.
+prometheus:
+  enable: false

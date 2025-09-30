@@ -1,0 +1,11 @@
+---
+apiVersion: ocular.crashoverride.run/v1beta1
+kind: Downloader
+metadata:
+  name: ocular-defaults-pypi
+spec:
+  container:
+    image: '{{ .Values.downloaders.image.repository }}:{{ .Values.downloaders.image.tag }}'
+    name: pypi
+    resources: {}
+status: {}

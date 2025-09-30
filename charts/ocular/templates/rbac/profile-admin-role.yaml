@@ -1,0 +1,22 @@
+{{- if .Values.rbacHelpers.enable }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+    labels:
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+        app.kubernetes.io/name: ocular
+    name: ocular-profile-admin-role
+rules:
+    - apiGroups:
+        - ocular.crashoverride.run
+      resources:
+        - profiles
+      verbs:
+        - '*'
+    - apiGroups:
+        - ocular.crashoverride.run
+      resources:
+        - profiles/status
+      verbs:
+        - get
+{{- end }}

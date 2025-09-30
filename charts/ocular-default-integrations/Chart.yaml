@@ -7,11 +7,18 @@
 # visit: <https://www.gnu.org/licenses/gpl-3.0.html>.
 
 apiVersion: v2
-name: ocular
-version: 0.4.0
+name: ocular-default-integrations
+version: 0.1.0
 kubeVersion: ">=1.26.0-0"
-description: An API for mass scanning static software assets
+description: A Helm chart for deploying default ocular integrations
 type: application
+appVersion: "0.1.2"
+home: https://ocularproject.io
+sources:
+  - https://github.com/crashappsec/ocular-default-integrations
+maintainers:
+  - name: Bryce Thuiot
+    email: bryce@crashoverride.com
 keywords:
   - git
   - kubernetes
@@ -20,13 +27,6 @@ keywords:
   - secrets
   - sca
   - security
-home: https://ocularproject.io
-sources:
-  - https://github.com/crashappsec/ocular
-maintainers:
-  - name: Bryce Thuiot
-    email: bryce@crashoverride.com
-appVersion: 0.2.0
 annotations:
   artifacthub.io/category: security
   artifacthub.io/license: GPL-3.0

@@ -2,10 +2,12 @@
 # Ocular #
 ##########
 
-charts/ocular/      @crashappsec/ocular
-hack/scripts/ocular @crashappsec/ocular
+charts/ocular/					@crashappsec/ocular
+charts/ocular-default-integrations		@crashappsec/ocular
+hack/scripts/ocular				@crashappsec/ocular
+hack/scripts/ocular-default-integrations	@crashappsec/ocular
 
 ###########
 # Default #
 ###########
-*	                @crashappsec/eng
+*						@crashappsec/eng
