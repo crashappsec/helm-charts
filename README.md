@@ -11,7 +11,7 @@ The charts are hosted using GitHub pages from the branch [`gh-pages`](../../tree
 | Chart                      | Current Version | Description                             | Documentation      |
 |----------------------------|-----------------|-----------------------------------------|--------------------|
 | [`ocular`](/charts/ocular) | `v0.4.0`        | [Ocular](crashappsec/ocular) deployment | [Artifact Hub](https://artifacthub.io/packages/helm/crashoverride-helm-charts/ocular) |
-| [`ocular-default-integrations`](/charts/ocular-default-integrations) | `v0.1.0`        | [Ocular default integrations](crashappsec/ocular-default-integrations) deployment | [Artifact Hub](https://artifacthub.io/packages/helm/crashoverride-helm-charts/ocular-default-integrations) |
+| [`ocular-default-integrations`](/charts/ocular-default-integrations) | `v0.1.1`        | [Ocular default integrations](crashappsec/ocular-default-integrations) deployment | [Artifact Hub](https://artifacthub.io/packages/helm/crashoverride-helm-charts/ocular-default-integrations) |
 
 ## Installing Charts
 

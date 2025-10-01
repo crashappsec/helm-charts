@@ -10,12 +10,6 @@ OCULAR_REPOSITORY_ROOT ?= ../ocular
 
 OCULAR_DI_REPOSITORY_ROOT ?= ../ocular-default-integrations
 
-OCULAR_VERSION ?= v0.2.0
-export OCULAR_VERSION
-
-OCULAR_DEFAULTS_VERSION ?= v0.1.2
-export OCULAR_DEFAULTS_VERSION
-
 ###############
 # Development #
 ###############

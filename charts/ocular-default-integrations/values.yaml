@@ -1,12 +1,12 @@
 crawlers:
   image:
     repository: "ghcr.io/crashappsec/ocular-default-crawlers"
-    tag: "v0.1.2"
+    tag: "v0.1.3"
 downloaders:
   image:
     repository: "ghcr.io/crashappsec/ocular-default-downloaders"
-    tag: "v0.1.2"
+    tag: "v0.1.3"
 uploaders:
   image:
     repository: "ghcr.io/crashappsec/ocular-default-uploaders"
-    tag: "v0.1.2"
+    tag: "v0.1.3"
