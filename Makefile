@@ -10,21 +10,46 @@ OCULAR_REPOSITORY_ROOT ?= ../ocular
 
 OCULAR_DI_REPOSITORY_ROOT ?= ../ocular-default-integrations
 
+ENV_FILE ?= .env
+
+# Only if .env file is present
+ifneq (,$(wildcard ${ENV_FILE}))
+	include ${ENV_FILE}
+endif
+
+define NEWLINE
+
+endef
+
+
 ###############
 # Development #
 ###############
-.PHONY: fmt fmt-license
 
-fmt: fmt-license
-
-fmt-license:
+.PHONY: lint-fix
+lint-fix:
 	@echo "Formatting license headers ..."
 	@license-eye header fix
 
-.PHONY: generate-ocular-helm-chart
-generate-ocular-helm-chart:
-	@hack/scripts/ocular/generate-helm-chart.sh --repository ${OCULAR_REPOSITORY_ROOT}
+# Package a helm chart as a .tar.gz
+.PHONY: helm-package-%
+helm-package-%:
+	@helm package charts/$(@:helm-package-%=%) -d out/$(@:helm-package-%=%)
 
-.PHONY: generate-ocular-default-integrations-helm-chart
-generate-ocular-default-integrations-helm-chart:
-	@hack/scripts/ocular-default-integrations/generate-helm-chart.sh --repository ${OCULAR_DI_REPOSITORY_ROOT}
+# Can push a helm artfiact to a OCI registry
+.PHONY: helm-push-%
+helm-push-%: helm-package-%
+	@if [ -z '$(CHART_REPOSITORY)' ]; then echo "ERROR: must set CHART_REPOSITORY varibale"; exit 1; fi
+	@CHART=$(@:helm-push-%=%); \
+		VERSION=$$(helm show chart charts/$$CHART | yq '.version'); \
+		FILE=out/$$CHART/$$CHART-$$VERSION.tgz; \
+		echo "this target will push the chart '$$FILE' to '$(CHART_REPOSITORY)'"; \
+		read -r -p "continue? ( ctrl+c to cancel, or enter to contiue ):" YN
+	@CHART=$(@:helm-push-%=%); \
+		VERSION=$$(helm show chart charts/$$CHART | yq '.version'); \
+		FILE=out/$$CHART/$$CHART-$$VERSION.tgz; \
+		helm push $$FILE $(CHART_REPOSITORY)
+
+.PHONY: helm-generate-%
+helm-generate-%:
+	@hack/scripts/$(@:helm-generate-%=%)/generate-helm-chart.sh --repository ../$(@:helm-generate-%=%)
