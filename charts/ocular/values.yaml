@@ -3,8 +3,15 @@ controllerManager:
   replicas: 1
   image:
     repository: "ghcr.io/crashappsec/ocular-controller"
-    tag: "v0.2.0"
+    tag: "v0.2.1"
     pullPolicy: "IfNotPresent"
+  # Additional labels to add to the controller manager deployment
+  labels: {}
+  # Additional environment variables to add to the controller manager container
+  env: []
+  # Additional volumes to add to the controller manager pod
+  volumes: []
+  volumeMounts: []
   # Pod-level security settings
   podSecurityContext:
     runAsNonRoot: true
@@ -25,6 +32,15 @@ controllerManager:
     requests:
       cpu: 10m
       memory: 64Mi
+# Configure the extractor image
+# This is the image that is used by ocular
+# To facilitate the transfer of artfacts from
+# scanners to uploaders
+extractor:
+  image:
+    repository: "ghcr.io/crashappsec/ocular-extractor"
+    tag: "v0.2.1"
+    pullPolicy: Always
 # Essential RBAC permissions (required for controller operation)
 # These include ServiceAccount, controller permissions, leader election, and metrics access
 # Note: Essential RBAC is always enabled as it's required for the controller to function

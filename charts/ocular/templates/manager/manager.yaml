@@ -2,6 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
     labels:
+        {{- range $key, $val := .Values.controllerManager.labels }}
+        {{ $key }}: {{ $val | quote }}
+        {{- end}}
         app.kubernetes.io/managed-by: {{ .Release.Service }}
         app.kubernetes.io/name: ocular
         control-plane: controller-manager
@@ -18,6 +21,9 @@ spec:
             annotations:
                 kubectl.kubernetes.io/default-container: manager
             labels:
+                {{- range $key, $val := .Values.controllerManager.labels }}
+                {{ $key }}: {{ $val | quote }}
+                {{- end}}
                 app.kubernetes.io/name: ocular
                 control-plane: controller-manager
         spec:
@@ -49,12 +55,18 @@ spec:
                     - --webhook-cert-path=/tmp/k8s-webhook-server/serving-certs
                     {{- end }}
                   command:
-                    - /manager
+                    - /entrypoint
                   env:
+                    {{- with .Values.controllerManager.env }}
+                    {{- toYaml . | nindent 20}}
+                    {{- end}}
                     - name: OCULAR_EXTRACTOR_IMG
-                      value: {{ .Values.controllerManager.image.repository }}:{{ .Values.controllerManager.image.tag }}
+                      value: "{{ .Values.extractor.image.repository }}:{{ .Values.extractor.image.tag }}"
+                    - name: OCULAR_EXTRACTOR_PULLPOLICY
+                      value:  "{{ .Values.extractor.image.pullPolicy }}"
                     - name: OCULAR_SEARCH_CLUSTER_ROLE
                       value: ocular-search-cluster-role
+                  imagePullPolicy: {{ .Values.controllerManager.image.pullPolicy }}
                   image: "{{ .Values.controllerManager.image.repository }}:{{ .Values.controllerManager.image.tag }}"
                   livenessProbe:
                     httpGet:
@@ -87,6 +99,9 @@ spec:
                             - ALL
                     readOnlyRootFilesystem: true
                   volumeMounts:
+                    {{- with .Values.controllerManager.volumeMounts }}
+                    {{- toYaml . | nindent 20}}
+                    {{- end}}
                     {{- if and .Values.certManager.enable .Values.metrics.enable }}
                     - mountPath: /tmp/k8s-metrics-server/metrics-certs
                       name: metrics-certs
@@ -104,6 +119,9 @@ spec:
             serviceAccountName: ocular-controller-manager
             terminationGracePeriodSeconds: 10
             volumes:
+                {{- with .Values.controllerManager.volumes }}
+                {{- toYaml . | nindent 16}}
+                {{- end}}
                 {{- if and .Values.certManager.enable .Values.metrics.enable }}
                 - name: metrics-certs
                   secret:
