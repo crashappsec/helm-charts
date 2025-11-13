@@ -32,24 +32,48 @@ lint-fix:
 	@license-eye header fix
 
 # Package a helm chart as a .tar.gz
-.PHONY: helm-package-%
-helm-package-%:
-	@helm package charts/$(@:helm-package-%=%) -d out/$(@:helm-package-%=%)
+helm-package-chart-%:
+	@helm package charts/$(@:helm-package-chart-%=%) -d out/$(@:helm-package-chart-%=%)
+
+.PHONY: helm-package-ocular
+helm-package-ocular:
+	@$(MAKE) helm-package-chart-ocular
+
+.PHONY: helm-package-ocular-default-integrations
+helm-package-ocular-default-integrations:
+	@$(MAKE) helm-package-chart-ocular-default-integrations
+
+
 
 # Can push a helm artfiact to a OCI registry
-.PHONY: helm-push-%
-helm-push-%: helm-package-%
+helm-push-chart-%: helm-package-chart-%
 	@if [ -z '$(CHART_REPOSITORY)' ]; then echo "ERROR: must set CHART_REPOSITORY varibale"; exit 1; fi
-	@CHART=$(@:helm-push-%=%); \
+	@CHART=$(@:helm-push-chart-%=%); \
 		VERSION=$$(helm show chart charts/$$CHART | yq '.version'); \
 		FILE=out/$$CHART/$$CHART-$$VERSION.tgz; \
 		echo "this target will push the chart '$$FILE' to '$(CHART_REPOSITORY)'"; \
 		read -r -p "continue? ( ctrl+c to cancel, or enter to contiue ):" YN
-	@CHART=$(@:helm-push-%=%); \
+	@CHART=$(@:helm-push-chart-%=%); \
 		VERSION=$$(helm show chart charts/$$CHART | yq '.version'); \
 		FILE=out/$$CHART/$$CHART-$$VERSION.tgz; \
 		helm push $$FILE $(CHART_REPOSITORY)
 
-.PHONY: helm-generate-%
-helm-generate-%:
-	@hack/scripts/$(@:helm-generate-%=%)/generate-helm-chart.sh --repository ../$(@:helm-generate-%=%)
+.PHONY: helm-push-ocular
+helm-push-ocular:
+	@$(MAKE) helm-push-chart-ocular
+
+.PHONY: helm-push-ocular-default-integrations
+helm-push-ocular-default-integrations:
+	@$(MAKE) helm-push-chart-ocular-default-integrations
+
+
+helm-generate-chart-%:
+	@hack/scripts/$(@:helm-generate-chart-%=%)/generate-helm-chart.sh --repository ../$(@:helm-generate-chart-%=%)
+
+.PHONY: helm-generate-ocular
+helm-generate-ocular:
+	@$(MAKE) helm-generate-chart-ocular
+
+.PHONY: helm-generate-ocular-default-integrations
+helm-generate-ocular-default-integrations:
+	@$(MAKE) helm-generate-chart-ocular-default-integrations

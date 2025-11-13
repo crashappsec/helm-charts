@@ -50,7 +50,7 @@ OCULAR_ENV_FILE='' make -C "$OCULAR_REPO_ROOT" clean-helm
 # will read/write to the folder 'dist/chart' within the repository
 cp -r "$REPO_ROOT/charts/ocular/" "$OCULAR_REPO_ROOT/dist/chart/"
 
-OCULAR_ENV_FILE='' make -C "$OCULAR_REPO_ROOT" build-helm
+OCULAR_ENV_FILE='' OCULAR_VERSION=$(git -C "$OCULAR_REPO_ROOT" describe --tags --dirty=-dev) make -C "$OCULAR_REPO_ROOT" build-helm
 
 # Once the files are updated, copy them back
 rm -rf "$REPO_ROOT/charts/ocular"

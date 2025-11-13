@@ -2,23 +2,21 @@
 apiVersion: ocular.crashoverride.run/v1beta1
 kind: Downloader
 metadata:
-  name: ocular-defaults-s3
+  name: ocular-defaults-git
 spec:
   container:
-    env:
-      - name: AWS_CONFIG_FILE
-        value: /ocular/aws/config
     image: '{{ .Values.downloaders.image.repository }}:{{ .Values.downloaders.image.tag }}'
-    name: s3
+    name: git
     resources: {}
     volumeMounts:
-      - mountPath: /ocular/aws/config
-        name: downloaders-s3-file-secrets
+      - mountPath: /etc/gitconfig
+        name: downloaders-git-file-secrets
         readOnly: true
-        subPath: aws-config
+        subPath: gitconfig
+  metadataFiles:
+    - /mnt/metadata/git.json
   volumes:
-    - name: downloaders-s3-file-secrets
+    - name: downloaders-git-file-secrets
       secret:
         optional: true
         secretName: downloaders-secrets
-status: {}
