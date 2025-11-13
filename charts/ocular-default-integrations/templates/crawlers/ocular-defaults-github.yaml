@@ -1,3 +1,4 @@
+---
 apiVersion: ocular.crashoverride.run/v1beta1
 kind: Crawler
 metadata:
@@ -18,6 +19,10 @@ spec:
     - description: Comma-separated list of GitLab groups to crawl.
       name: GITHUB_ORGS
       required: true
+    - default: "false"
+      description: If set to anything but '0' or 'false', forked repositories will be skipped.
+      name: SKIP_FORKS
+      required: false
     - description: Profile to use for the pipelines created from this crawler.
       name: PROFILE
       required: true

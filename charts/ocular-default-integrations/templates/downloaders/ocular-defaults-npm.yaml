@@ -8,4 +8,3 @@ spec:
     image: '{{ .Values.downloaders.image.repository }}:{{ .Values.downloaders.image.tag }}'
     name: npm
     resources: {}
-status: {}

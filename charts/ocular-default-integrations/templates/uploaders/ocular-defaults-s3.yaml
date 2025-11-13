@@ -1,0 +1,33 @@
+apiVersion: ocular.crashoverride.run/v1beta1
+kind: Uploader
+metadata:
+  name: ocular-defaults-s3
+spec:
+  container:
+    image: '{{ .Values.uploaders.image.repository }}:{{ .Values.uploaders.image.tag }}'
+    name: s3
+    resources: {}
+    volumeMounts:
+      - mountPath: /ocular/aws/config
+        name: uploaders-s3-file-secrets
+        readOnly: true
+        subPath: aws-config
+  parameters:
+    - description: AWS region of the ECR repository. Defaults to the region configured in the AWS SDK.
+      name: AWS_REGION
+      required: false
+    - description: ARN of the role to assume for accessing the ECR repository. Optional.
+      name: AWS_PROFILE
+      required: false
+    - description: PipelineName of the S3 bucket to upload to.
+      name: BUCKET
+      required: true
+    - default: ""
+      description: Template for the folder structure in the S3 bucket. Supports placeholders like .PipelineName, .TargetID, .TargetVersion . Using '/' in the template will create nested folders. Defaults to '.PipelineName' .
+      name: FOLDER_TEMPLATE
+      required: false
+  volumes:
+    - name: uploaders-s3-file-secrets
+      secret:
+        optional: true
+        secretName: uploaders-secrets
