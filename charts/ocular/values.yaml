@@ -3,7 +3,7 @@ controllerManager:
   replicas: 1
   image:
     repository: "ghcr.io/crashappsec/ocular-controller"
-    tag: "v0.2.1"
+    tag: "v0.2.2"
     pullPolicy: "IfNotPresent"
   # Additional labels to add to the controller manager deployment
   labels: {}
@@ -39,7 +39,7 @@ controllerManager:
 extractor:
   image:
     repository: "ghcr.io/crashappsec/ocular-extractor"
-    tag: "v0.2.1"
+    tag: "v0.2.2"
     pullPolicy: Always
 # Essential RBAC permissions (required for controller operation)
 # These include ServiceAccount, controller permissions, leader election, and metrics access

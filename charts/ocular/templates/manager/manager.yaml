@@ -54,18 +54,25 @@ spec:
                     {{- if .Values.certManager.enable }}
                     - --webhook-cert-path=/tmp/k8s-webhook-server/serving-certs
                     {{- end }}
-                  command:
-                    - /entrypoint
                   env:
                     {{- with .Values.controllerManager.env }}
                     {{- toYaml . | nindent 20}}
                     {{- end}}
                     - name: OCULAR_EXTRACTOR_IMG
-                      value: "{{ .Values.extractor.image.repository }}:{{ .Values.extractor.image.tag }}"
+                      valueFrom:
+                        configMapKeyRef:
+                            key: OCULAR_EXTRACTOR_IMG
+                            name: ocular-controller-manager-config-dh8htt852d
                     - name: OCULAR_EXTRACTOR_PULLPOLICY
-                      value:  "{{ .Values.extractor.image.pullPolicy }}"
+                      valueFrom:
+                        configMapKeyRef:
+                            key: OCULAR_EXTRACTOR_PULLPOLICY
+                            name: ocular-controller-manager-config-dh8htt852d
                     - name: OCULAR_SEARCH_CLUSTER_ROLE
-                      value: ocular-search-cluster-role
+                      valueFrom:
+                        configMapKeyRef:
+                            key: OCULAR_SEARCH_CLUSTER_ROLE
+                            name: ocular-controller-manager-config-dh8htt852d
                   imagePullPolicy: {{ .Values.controllerManager.image.pullPolicy }}
                   image: "{{ .Values.controllerManager.image.repository }}:{{ .Values.controllerManager.image.tag }}"
                   livenessProbe:
@@ -87,11 +94,11 @@ spec:
                     periodSeconds: 10
                   resources:
                     limits:
-                        cpu: 500m
-                        memory: 128Mi
+                        cpu: "{{ .Values.controllerManager.resources.limits.cpu }}"
+                        memory:  "{{ .Values.controllerManager.resources.limits.memory }}"
                     requests:
-                        cpu: 10m
-                        memory: 64Mi
+                        cpu:  "{{ .Values.controllerManager.resources.requests.cpu }}"
+                        memory:  "{{ .Values.controllerManager.resources.requests.memory }}"
                   securityContext:
                     allowPrivilegeEscalation: false
                     capabilities:
