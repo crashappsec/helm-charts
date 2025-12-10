@@ -5,18 +5,31 @@ metadata:
   name: ocular-defaults-git
 spec:
   container:
+    env:
+      - name: GITHUB_APP_PRIVATE_KEY
+        valueFrom:
+          secretKeyRef:
+            key: github-app-private-key
+            name: "{{ .Values.downloaders.secretName }}"
+            optional: true
+      - name: GITHUB_APP_ID
+        valueFrom:
+          secretKeyRef:
+            key: github-app-id
+            name: "{{ .Values.downloaders.secretName }}"
+            optional: true
     image: '{{ .Values.downloaders.image.repository }}:{{ .Values.downloaders.image.tag }}'
     name: git
     resources: {}
     volumeMounts:
-      - mountPath: /etc/gitconfig
-        name: downloaders-git-file-secrets
+      - mountPath: /etc/ocular/gitconfig
+        name: git-file-secrets
         readOnly: true
         subPath: gitconfig
   metadataFiles:
     - /mnt/metadata/git.json
   volumes:
-    - name: downloaders-git-file-secrets
+    - name: git-file-secrets
       secret:
         optional: true
-        secretName: downloaders-secrets
+        secretName: "{{ .Values.downloaders.secretName }}"
