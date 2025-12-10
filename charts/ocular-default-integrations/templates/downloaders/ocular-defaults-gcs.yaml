@@ -10,7 +10,7 @@ spec:
         valueFrom:
           secretKeyRef:
             key: downloader-gcs-credentials
-            name: downloaders-secrets
+            name: "{{ .Values.downloaders.secretName }}"
             optional: true
     image: '{{ .Values.downloaders.image.repository }}:{{ .Values.downloaders.image.tag }}'
     name: gcs
