@@ -10,7 +10,7 @@ spec:
         valueFrom:
           secretKeyRef:
             key: github-token
-            name: crawlers-secrets
+            name: "{{ .Values.crawlers.secretName }}"
             optional: true
     image: '{{ .Values.crawlers.image.repository }}:{{ .Values.crawlers.image.tag }}'
     name: ghcr
