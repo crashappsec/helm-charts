@@ -5,6 +5,34 @@ entries:
       artifacthub.io/category: security
       artifacthub.io/license: GPL-3.0
     apiVersion: v2
+    appVersion: 0.2.3
+    created: "2025-12-10T20:56:01.634538929Z"
+    description: An API for mass scanning static software assets
+    digest: 230108560f267f511d1eca11aa7a2b0882f2fbb197ad7f202bc688a4b262af42
+    home: https://ocularproject.io
+    keywords:
+    - git
+    - kubernetes
+    - scanning
+    - sast
+    - secrets
+    - sca
+    - security
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: bryce@crashoverride.com
+      name: Bryce Thuiot
+    name: ocular
+    sources:
+    - https://github.com/crashappsec/ocular
+    type: application
+    urls:
+    - ocular-0.4.3.tgz
+    version: 0.4.3
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/license: GPL-3.0
+    apiVersion: v2
     appVersion: 0.2.2
     created: "2025-11-13T22:04:38.452380205Z"
     description: An API for mass scanning static software assets
@@ -86,6 +114,34 @@ entries:
     - ocular-0.4.0.tgz
     version: 0.4.0
   ocular-default-integrations:
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/license: GPL-3.0
+    apiVersion: v2
+    appVersion: 0.1.6
+    created: "2025-12-10T20:56:01.829177386Z"
+    description: A Helm chart for deploying default ocular integrations
+    digest: c7e93c41e46d8b54d90d09eb0484743b9d8374ec659bbf8ecc0f14427c84fe0d
+    home: https://ocularproject.io
+    keywords:
+    - git
+    - kubernetes
+    - scanning
+    - sast
+    - secrets
+    - sca
+    - security
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: bryce@crashoverride.com
+      name: Bryce Thuiot
+    name: ocular-default-integrations
+    sources:
+    - https://github.com/crashappsec/ocular-default-integrations
+    type: application
+    urls:
+    - ocular-default-integrations-0.1.6.tgz
+    version: 0.1.6
   - annotations:
       artifacthub.io/category: security
       artifacthub.io/license: GPL-3.0
@@ -226,4 +282,4 @@ entries:
     urls:
     - ocular-default-integrations-0.1.0.tgz
     version: 0.1.0
-generated: "2025-12-04T14:38:50.438380898Z"
+generated: "2025-12-10T20:56:01.829215988Z"
