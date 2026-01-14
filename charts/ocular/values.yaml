@@ -7,6 +7,8 @@ manager:
     pullPolicy: "IfNotPresent"
   # Additional labels to add to the controller manager deployment
   labels: {}
+  # Additional annotations to add to the controller manager deployment
+  annotations: {}
   args: []
   # Additional environment variables to add to the controller manager container
   env: []
