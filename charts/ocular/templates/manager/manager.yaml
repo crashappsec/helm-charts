@@ -19,6 +19,9 @@ spec:
     template:
         metadata:
             annotations:
+                {{- range $key, $val := .Values.manager.annotations }}
+                {{ $key }}: {{ $val | quote }}
+                {{- end}}
                 kubectl.kubernetes.io/default-container: manager
             labels:
                 {{- range $key, $val := .Values.manager.labels }}
