@@ -3,13 +3,15 @@ kind: ClusterRoleBinding
 metadata:
     labels:
         app.kubernetes.io/managed-by: {{ .Release.Service }}
-        app.kubernetes.io/name: ocular
-    name: ocular-manager-rolebinding
+        app.kubernetes.io/name: {{ include "ocular.name" . }}
+        helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    name: {{ include "ocular.resourceName" (dict "suffix" "manager-rolebinding" "context" $) }}
 roleRef:
     apiGroup: rbac.authorization.k8s.io
     kind: ClusterRole
-    name: ocular-manager-role
+    name: {{ include "ocular.resourceName" (dict "suffix" "manager-role" "context" $) }}
 subjects:
     - kind: ServiceAccount
-      name: ocular-controller-manager
+      name: {{ include "ocular.resourceName" (dict "suffix" "controller-manager" "context" $) }}
       namespace: {{ .Release.Namespace }}

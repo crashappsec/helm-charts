@@ -4,15 +4,17 @@ kind: Certificate
 metadata:
     labels:
         app.kubernetes.io/managed-by: {{ .Release.Service }}
-        app.kubernetes.io/name: ocular
-    name: ocular-metrics-certs
+        app.kubernetes.io/name: {{ include "ocular.name" . }}
+        helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    name: {{ include "ocular.resourceName" (dict "suffix" "metrics-certs" "context" $) }}
     namespace: {{ .Release.Namespace }}
 spec:
     dnsNames:
-        - {{ include "chart.serviceName" (dict "suffix" "controller-manager-metrics-service" "context" .) }}.{{ .Release.Namespace }}.svc
-        - {{ include "chart.serviceName" (dict "suffix" "controller-manager-metrics-service" "context" .) }}.{{ .Release.Namespace }}.svc.cluster.local
+        - {{ include "ocular.resourceName" (dict "suffix" "controller-manager-metrics-service" "context" .) }}.{{ .Release.Namespace }}.svc
+        - {{ include "ocular.resourceName" (dict "suffix" "controller-manager-metrics-service" "context" .) }}.{{ .Release.Namespace }}.svc.cluster.local
     issuerRef:
         kind: Issuer
-        name: {{ include "chart.name" . }}-selfsigned-issuer
+        name: {{ include "ocular.resourceName" (dict "suffix" "selfsigned-issuer" "context" $) }}
     secretName: metrics-server-cert
 {{- end }}

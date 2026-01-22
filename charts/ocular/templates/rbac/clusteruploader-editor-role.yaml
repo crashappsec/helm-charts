@@ -7,20 +7,24 @@ metadata:
         app.kubernetes.io/name: {{ include "ocular.name" . }}
         helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         app.kubernetes.io/instance: {{ .Release.Name }}
-    name: {{ include "ocular.resourceName" (dict "suffix" "crawler-viewer-role" "context" $) }}
+    name: {{ include "ocular.resourceName" (dict "suffix" "clusteruploader-editor-role" "context" $) }}
 rules:
     - apiGroups:
         - ocular.crashoverride.run
       resources:
-        - crawlers
+        - clusteruploaders
       verbs:
+        - create
+        - delete
         - get
         - list
+        - patch
+        - update
         - watch
     - apiGroups:
         - ocular.crashoverride.run
       resources:
-        - crawlers/status
+        - clusteruploaders/status
       verbs:
         - get
 {{- end }}

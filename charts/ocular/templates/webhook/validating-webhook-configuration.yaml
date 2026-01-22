@@ -3,15 +3,72 @@ kind: ValidatingWebhookConfiguration
 metadata:
     annotations:
         {{- if .Values.certManager.enable }}
-        cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/ocular-serving-cert
+        cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ include "ocular.resourceName" (dict "suffix" "serving-cert" "context" $) }}
         {{- end }}
-    name: ocular-validating-webhook-configuration
+    name: {{ include "ocular.resourceName" (dict "suffix" "validating-webhook-configuration" "context" $) }}
 webhooks:
     - admissionReviewVersions:
         - v1
       clientConfig:
         service:
-            name: ocular-webhook-service
+            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
+            namespace: {{ .Release.Namespace }}
+            path: /validate-ocular-crashoverride-run-v1beta1-clustercrawler
+      failurePolicy: Fail
+      name: vclustercrawler-v1beta1.ocular.crashoverride.run
+      rules:
+        - apiGroups:
+            - ocular.crashoverride.run
+          apiVersions:
+            - v1beta1
+          operations:
+            - DELETE
+          resources:
+            - clustercrawlers
+      sideEffects: None
+    - admissionReviewVersions:
+        - v1
+      clientConfig:
+        service:
+            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
+            namespace: {{ .Release.Namespace }}
+            path: /validate-ocular-crashoverride-run-v1beta1-clusterdownloader
+      failurePolicy: Fail
+      name: vclusterdownloader-v1beta1.ocular.crashoverride.run
+      rules:
+        - apiGroups:
+            - ocular.crashoverride.run
+          apiVersions:
+            - v1beta1
+          operations:
+            - DELETE
+          resources:
+            - clusterdownloaders
+      sideEffects: None
+    - admissionReviewVersions:
+        - v1
+      clientConfig:
+        service:
+            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
+            namespace: {{ .Release.Namespace }}
+            path: /validate-ocular-crashoverride-run-v1beta1-clusteruploader
+      failurePolicy: Fail
+      name: vclusteruploader-v1beta1.ocular.crashoverride.run
+      rules:
+        - apiGroups:
+            - ocular.crashoverride.run
+          apiVersions:
+            - v1beta1
+          operations:
+            - DELETE
+          resources:
+            - clusteruploaders
+      sideEffects: None
+    - admissionReviewVersions:
+        - v1
+      clientConfig:
+        service:
+            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
             namespace: {{ .Release.Namespace }}
             path: /validate-ocular-crashoverride-run-v1beta1-crawler
       failurePolicy: Fail
@@ -22,6 +79,7 @@ webhooks:
           apiVersions:
             - v1beta1
           operations:
+            - CREATE
             - DELETE
             - UPDATE
           resources:
@@ -31,7 +89,7 @@ webhooks:
         - v1
       clientConfig:
         service:
-            name: ocular-webhook-service
+            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
             namespace: {{ .Release.Namespace }}
             path: /validate-ocular-crashoverride-run-v1beta1-cronsearch
       failurePolicy: Fail
@@ -51,7 +109,7 @@ webhooks:
         - v1
       clientConfig:
         service:
-            name: ocular-webhook-service
+            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
             namespace: {{ .Release.Namespace }}
             path: /validate-ocular-crashoverride-run-v1beta1-downloader
       failurePolicy: Fail
@@ -70,7 +128,7 @@ webhooks:
         - v1
       clientConfig:
         service:
-            name: ocular-webhook-service
+            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
             namespace: {{ .Release.Namespace }}
             path: /validate-ocular-crashoverride-run-v1beta1-pipeline
       failurePolicy: Fail
@@ -90,7 +148,7 @@ webhooks:
         - v1
       clientConfig:
         service:
-            name: ocular-webhook-service
+            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
             namespace: {{ .Release.Namespace }}
             path: /validate-ocular-crashoverride-run-v1beta1-profile
       failurePolicy: Fail
@@ -111,7 +169,7 @@ webhooks:
         - v1
       clientConfig:
         service:
-            name: ocular-webhook-service
+            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
             namespace: {{ .Release.Namespace }}
             path: /validate-ocular-crashoverride-run-v1beta1-search
       failurePolicy: Fail
@@ -131,7 +189,7 @@ webhooks:
         - v1
       clientConfig:
         service:
-            name: ocular-webhook-service
+            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
             namespace: {{ .Release.Namespace }}
             path: /validate-ocular-crashoverride-run-v1beta1-uploader
       failurePolicy: Fail

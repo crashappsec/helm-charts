@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-    name: ocular-manager-role
+    name: {{ include "ocular.resourceName" (dict "suffix" "manager-role" "context" $) }}
 rules:
     - apiGroups:
         - ""
@@ -20,6 +20,10 @@ rules:
     - apiGroups:
         - ocular.crashoverride.run
       resources:
+        - clustercrawlers
+        - clusterdownloaders
+        - clusterprofiles
+        - clusteruploaders
         - crawlers
         - downloaders
         - profiles

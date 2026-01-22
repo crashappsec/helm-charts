@@ -6,15 +6,17 @@ metadata:
         {{ $key }}: {{ $val | quote }}
         {{- end}}
         app.kubernetes.io/managed-by: {{ .Release.Service }}
-        app.kubernetes.io/name: ocular
+        app.kubernetes.io/name: {{ include "ocular.name" . }}
+        helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
         control-plane: controller-manager
-    name: ocular-controller-manager
+    name: {{ include "ocular.resourceName" (dict "suffix" "controller-manager" "context" $) }}
     namespace: {{ .Release.Namespace }}
 spec:
     replicas: 1
     selector:
         matchLabels:
-            app.kubernetes.io/name: ocular
+            app.kubernetes.io/name: {{ include "ocular.name" . }}
             control-plane: controller-manager
     template:
         metadata:
@@ -27,25 +29,21 @@ spec:
                 {{- range $key, $val := .Values.manager.labels }}
                 {{ $key }}: {{ $val | quote }}
                 {{- end}}
-                app.kubernetes.io/name: ocular
+                app.kubernetes.io/name: {{ include "ocular.name" . }}
+                helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+                app.kubernetes.io/instance: {{ .Release.Name }}
+                app.kubernetes.io/managed-by: {{ .Release.Service }}
                 control-plane: controller-manager
         spec:
-            affinity:
-                nodeAffinity:
-                    requiredDuringSchedulingIgnoredDuringExecution:
-                        nodeSelectorTerms:
-                            - matchExpressions:
-                                - key: kubernetes.io/arch
-                                  operator: In
-                                  values:
-                                    - amd64
-                                    - arm64
-                                    - ppc64le
-                                    - s390x
-                                - key: kubernetes.io/os
-                                  operator: In
-                                  values:
-                                    - linux
+            {{- with .Values.manager.tolerations }}
+            tolerations: {{ toYaml . | nindent 16 }}
+            {{- end }}
+            {{- with .Values.manager.nodeSelector }}
+            nodeSelector: {{ toYaml . | nindent 16 }}
+            {{- end }}
+            {{- with .Values.manager.affinity }}
+            affinity: {{ toYaml . | nindent 16 }}
+            {{- end }}
             containers:
                 - args:
                     {{- if .Values.metrics.enable }}
@@ -66,7 +64,7 @@ spec:
                     {{- end }}
                   envFrom:
                     - configMapRef:
-                        name: ocular-controller-manager-config-dh8htt852d
+                        name: {{ include "ocular.resourceName" (dict "suffix" "controller-manager-config" "context" $) }}
                   image: "{{ .Values.manager.image.repository }}:{{ .Values.manager.image.tag }}"
                   imagePullPolicy: {{ .Values.manager.image.pullPolicy }}
                   livenessProbe:
@@ -118,7 +116,7 @@ spec:
               {{- else }}
               {}
               {{- end }}
-            serviceAccountName: ocular-controller-manager
+            serviceAccountName: {{ include "ocular.resourceName" (dict "suffix" "controller-manager" "context" $) }}
             terminationGracePeriodSeconds: 10
             volumes:
                 {{- with .Values.manager.volumes }}

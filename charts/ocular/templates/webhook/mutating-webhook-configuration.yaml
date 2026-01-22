@@ -3,15 +3,15 @@ kind: MutatingWebhookConfiguration
 metadata:
     annotations:
         {{- if .Values.certManager.enable }}
-        cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/ocular-serving-cert
+        cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ include "ocular.resourceName" (dict "suffix" "serving-cert" "context" $) }}
         {{- end }}
-    name: ocular-mutating-webhook-configuration
+    name: {{ include "ocular.resourceName" (dict "suffix" "mutating-webhook-configuration" "context" $) }}
 webhooks:
     - admissionReviewVersions:
         - v1
       clientConfig:
         service:
-            name: ocular-webhook-service
+            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
             namespace: {{ .Release.Namespace }}
             path: /mutate-ocular-crashoverride-run-v1beta1-cronsearch
       failurePolicy: Fail
@@ -31,7 +31,7 @@ webhooks:
         - v1
       clientConfig:
         service:
-            name: ocular-webhook-service
+            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
             namespace: {{ .Release.Namespace }}
             path: /mutate-ocular-crashoverride-run-v1beta1-pipeline
       failurePolicy: Fail

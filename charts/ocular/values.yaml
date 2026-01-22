@@ -3,13 +3,14 @@ manager:
   replicas: 1
   image:
     repository: "ghcr.io/crashappsec/ocular-controller"
-    tag: "v0.2.4"
+    tag: "v0.2.5"
     pullPolicy: "IfNotPresent"
   # Additional labels to add to the controller manager deployment
   labels: {}
   # Additional annotations to add to the controller manager deployment
   annotations: {}
-  args: []
+  args:
+    - --leader-elect
   # Additional environment variables to add to the controller manager container
   env: []
   # Additional volumes to add to the controller manager pod
@@ -36,6 +37,27 @@ manager:
     requests:
       cpu: 10m
       memory: 64Mi
+  ## manager pod's affinity
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                  - amd64
+                  - arm64
+                  - ppc64le
+                  - s390x
+              - key: kubernetes.io/os
+                operator: In
+                values:
+                  - linux
+  ## manager pod's node selector
+  nodeSelector: {}
+  ## manager pod's tolerations
+  tolerations: []
 # Configure the extractor image
 # This is the image that is used by ocular
 # To facilitate the transfer of artfacts from
@@ -43,7 +65,7 @@ manager:
 extractor:
   image:
     repository: "ghcr.io/crashappsec/ocular-extractor"
-    tag: "v0.2.4"
+    tag: "v0.2.5"
     pullPolicy: IfNotPresent
 # Essential RBAC permissions (required for controller operation)
 # These include ServiceAccount, controller permissions, leader election, and metrics access

@@ -1,6 +1,6 @@
 ---
 apiVersion: ocular.crashoverride.run/v1beta1
-kind: Uploader
+kind: ClusterUploader
 metadata:
   name: ocular-defaults-webhook
 spec:
