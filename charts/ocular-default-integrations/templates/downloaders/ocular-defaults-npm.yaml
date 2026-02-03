@@ -1,6 +1,6 @@
 ---
 apiVersion: ocular.crashoverride.run/v1beta1
-kind: Downloader
+kind: ClusterDownloader
 metadata:
   name: ocular-defaults-npm
 spec:

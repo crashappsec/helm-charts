@@ -4,8 +4,10 @@ kind: Issuer
 metadata:
     labels:
         app.kubernetes.io/managed-by: {{ .Release.Service }}
-        app.kubernetes.io/name: ocular
-    name: ocular-selfsigned-issuer
+        app.kubernetes.io/name: {{ include "ocular.name" . }}
+        helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    name: {{ include "ocular.resourceName" (dict "suffix" "selfsigned-issuer" "context" $) }}
     namespace: {{ .Release.Namespace }}
 spec:
     selfSigned: {}

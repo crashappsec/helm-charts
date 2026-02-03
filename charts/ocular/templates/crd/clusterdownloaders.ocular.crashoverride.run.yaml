@@ -4,20 +4,20 @@ kind: CustomResourceDefinition
 metadata:
     annotations:
         controller-gen.kubebuilder.io/version: v0.20.0
-    name: downloaders.ocular.crashoverride.run
+    name: clusterdownloaders.ocular.crashoverride.run
 spec:
     group: ocular.crashoverride.run
     names:
-        kind: Downloader
-        listKind: DownloaderList
-        plural: downloaders
-        singular: downloader
-    scope: Namespaced
+        kind: ClusterDownloader
+        listKind: ClusterDownloaderList
+        plural: clusterdownloaders
+        singular: clusterdownloader
+    scope: Cluster
     versions:
         - name: v1beta1
           schema:
             openAPIV3Schema:
-                description: Downloader is the Schema for the downloaders API
+                description: ClusterDownloader is the Schema for the clusterdownloaders API
                 properties:
                     apiVersion:
                         description: |-
@@ -37,7 +37,9 @@ spec:
                     metadata:
                         type: object
                     spec:
-                        description: spec defines the desired state of Downloader
+                        description: |-
+                            spec defines the desired state of ClusterDownloader
+                            It is the same as [DownloaderSpec]
                         properties:
                             container:
                                 description: |-
@@ -3338,10 +3340,10 @@ spec:
                             - container
                         type: object
                     status:
-                        description: status defines the observed state of Downloader
+                        description: status defines the observed state of ClusterDownloader
                         properties:
                             conditions:
-                                description: Conditions represent the latest available observations of a Downloader's current state.
+                                description: Conditions represent the current state of the ClusterDownloader resource.
                                 items:
                                     description: Condition contains details for one aspect of the current state of this API Resource.
                                     properties:

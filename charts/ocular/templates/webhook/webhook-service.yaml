@@ -3,8 +3,10 @@ kind: Service
 metadata:
     labels:
         app.kubernetes.io/managed-by: {{ .Release.Service }}
-        app.kubernetes.io/name: ocular
-    name: ocular-webhook-service
+        app.kubernetes.io/name: {{ include "ocular.name" . }}
+        helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
     namespace: {{ .Release.Namespace }}
 spec:
     ports:
@@ -12,5 +14,5 @@ spec:
           protocol: TCP
           targetPort: {{ .Values.webhook.port }}
     selector:
-        app.kubernetes.io/name: ocular
+        app.kubernetes.io/name: {{ include "ocular.name" . }}
         control-plane: controller-manager
