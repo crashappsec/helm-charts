@@ -12,6 +12,7 @@ version: 0.1.7
 kubeVersion: ">=1.26.0-0"
 description: A Helm chart for deploying default ocular integrations
 type: application
+icon: "https://raw.githubusercontent.com/crashappsec/ocularproject.io/refs/heads/main/static/favicon.ico"
 appVersion: "0.1.7"
 home: https://ocularproject.io
 sources:

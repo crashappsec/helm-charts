@@ -1,0 +1,10 @@
+apiVersion: ocular.crashoverride.run/v1beta1
+kind: ClusterDownloader
+metadata:
+    name: {{ include "chalkular.resourceName" (dict "suffix" "artifacts" "context" $) }}
+    namespace: {{ .Release.Namespace }}
+spec:
+    container:
+        image:  "{{ .Values.downloader.image.repository }}:{{ .Values.downloader.image.tag }}"
+        imagePullPolicy:  "{{ .Values.downloader.image.pullPolicy }}"
+        name: artifact-extract

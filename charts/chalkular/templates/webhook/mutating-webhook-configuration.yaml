@@ -1,0 +1,29 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+    annotations:
+        {{- if .Values.certManager.enable }}
+        cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ include "chalkular.resourceName" (dict "suffix" "serving-cert" "context" $) }}
+        {{- end }}
+    name: {{ include "chalkular.resourceName" (dict "suffix" "mutating-webhook-configuration" "context" $) }}
+webhooks:
+    - admissionReviewVersions:
+        - v1
+      clientConfig:
+        service:
+            name: {{ include "chalkular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
+            namespace: {{ .Release.Namespace }}
+            path: /mutate-chalk-ocular-crashoverride-run-v1beta1-mediatypepolicy
+      failurePolicy: Fail
+      name: mmediatypepolicy-v1beta1.kb.io
+      rules:
+        - apiGroups:
+            - chalk.ocular.crashoverride.run
+          apiVersions:
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - mediatypepolicies
+      sideEffects: None

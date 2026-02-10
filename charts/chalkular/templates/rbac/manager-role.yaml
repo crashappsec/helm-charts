@@ -1,0 +1,46 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+    name: {{ include "chalkular.resourceName" (dict "suffix" "manager-role" "context" $) }}
+rules:
+    - apiGroups:
+        - chalk.ocular.crashoverride.run
+      resources:
+        - mediatypepolicies
+      verbs:
+        - create
+        - delete
+        - get
+        - list
+        - patch
+        - update
+        - watch
+    - apiGroups:
+        - chalk.ocular.crashoverride.run
+      resources:
+        - mediatypepolicies/finalizers
+      verbs:
+        - update
+    - apiGroups:
+        - chalk.ocular.crashoverride.run
+      resources:
+        - mediatypepolicies/status
+      verbs:
+        - get
+        - patch
+        - update
+    - apiGroups:
+        - ocular.crashoverride.run
+      resources:
+        - clusterdownloaders
+        - downloaders
+        - pipelines
+        - profiles
+      verbs:
+        - create
+        - delete
+        - get
+        - list
+        - patch
+        - update
+        - watch
