@@ -44,6 +44,10 @@ helm-package-ocular-default-integrations:
 	@$(MAKE) helm-package-chart-ocular-default-integrations
 
 
+.PHONY: helm-package-chalkular
+helm-package-chalkular:
+	@$(MAKE) helm-package-chart-chalkular
+
 
 # Can push a helm artfiact to a OCI registry
 helm-push-chart-%: helm-package-chart-%
@@ -66,6 +70,10 @@ helm-push-ocular:
 helm-push-ocular-default-integrations:
 	@$(MAKE) helm-push-chart-ocular-default-integrations
 
+.PHONY: helm-push-chalkular
+helm-push-chalkular:
+	@$(MAKE) helm-push-chart-chalkular
+
 
 helm-generate-chart-%:
 	@hack/scripts/$(@:helm-generate-chart-%=%)/generate-helm-chart.sh --repository ../$(@:helm-generate-chart-%=%)
@@ -77,3 +85,8 @@ helm-generate-ocular:
 .PHONY: helm-generate-ocular-default-integrations
 helm-generate-ocular-default-integrations:
 	@$(MAKE) helm-generate-chart-ocular-default-integrations
+
+
+.PHONY: helm-generate-chalkular
+helm-generate-chalkular:
+	@$(MAKE) helm-generate-chart-chalkular
