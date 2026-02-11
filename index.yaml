@@ -1,5 +1,17 @@
 apiVersion: v1
 entries:
+  chalkular:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2026-02-11T17:37:51.599570822Z"
+    description: Chalkular provides a way for chalk to trigger Ocular pipelines
+    digest: ab3e8cca70970b99292de2b26946f9a1525e40975f85bafa87a0310d92c5e0b7
+    icon: https://raw.githubusercontent.com/crashappsec/ocularproject.io/refs/heads/main/static/favicon.ico
+    name: chalkular
+    type: application
+    urls:
+    - chalkular-0.0.1.tgz
+    version: 0.0.1
   ocular:
   - annotations:
       artifacthub.io/category: security
@@ -366,4 +378,4 @@ entries:
     urls:
     - ocular-default-integrations-0.1.0.tgz
     version: 0.1.0
-generated: "2026-02-03T18:19:40.202785999Z"
+generated: "2026-02-11T17:37:51.909730924Z"
