@@ -18,6 +18,12 @@ spec:
             key: github-app-id
             name: "{{ .Values.downloaders.secretName }}"
             optional: true
+      - name: GITHUB_TOKEN
+        valueFrom:
+          secretKeyRef:
+            key: github-token
+            name: "{{ .Values.downloaders.secretName }}"
+            optional: true
     image: '{{ .Values.downloaders.image.repository }}:{{ .Values.downloaders.image.tag }}'
     name: git
     resources: {}
@@ -28,6 +34,10 @@ spec:
         subPath: gitconfig
   metadataFiles:
     - /mnt/metadata/git.json
+  parameters:
+    - description: Create referecnes to dangling commits (omit to disable)
+      name: CREATE_DANGLING_REFERENCES
+      required: false
   volumes:
     - name: git-file-secrets
       secret:
