@@ -17,6 +17,35 @@ entries:
       artifacthub.io/category: security
       artifacthub.io/license: GPL-3.0
     apiVersion: v2
+    appVersion: 0.2.6
+    created: "2026-02-18T17:35:32.514824019Z"
+    description: An API for mass scanning static software assets
+    digest: e4c718a1d13dae5ba322dba3976e1397db750ee2b778d6b7e98e51dff871a12d
+    home: https://ocularproject.io
+    icon: https://ocularproject.io/favicon-32x32.png
+    keywords:
+    - git
+    - kubernetes
+    - scanning
+    - sast
+    - secrets
+    - sca
+    - security
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: bryce@crashoverride.com
+      name: Bryce Thuiot
+    name: ocular
+    sources:
+    - https://github.com/crashappsec/ocular
+    type: application
+    urls:
+    - ocular-0.4.6.tgz
+    version: 0.4.6
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/license: GPL-3.0
+    apiVersion: v2
     appVersion: 0.2.5
     created: "2026-02-03T18:19:40.005167512Z"
     description: An API for mass scanning static software assets
@@ -182,6 +211,35 @@ entries:
     - ocular-0.4.0.tgz
     version: 0.4.0
   ocular-default-integrations:
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/license: GPL-3.0
+    apiVersion: v2
+    appVersion: 0.1.8
+    created: "2026-02-18T17:35:32.754892928Z"
+    description: A Helm chart for deploying default ocular integrations
+    digest: 5059e2d772a3bd36c6685fcf1f8a59de4eb543b43afd93a6917e73af852c9198
+    home: https://ocularproject.io
+    icon: https://ocularproject.io/favicon-32x32.png
+    keywords:
+    - git
+    - kubernetes
+    - scanning
+    - sast
+    - secrets
+    - sca
+    - security
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: bryce@crashoverride.com
+      name: Bryce Thuiot
+    name: ocular-default-integrations
+    sources:
+    - https://github.com/crashappsec/ocular-default-integrations
+    type: application
+    urls:
+    - ocular-default-integrations-0.1.8.tgz
+    version: 0.1.8
   - annotations:
       artifacthub.io/category: security
       artifacthub.io/license: GPL-3.0
@@ -378,4 +436,4 @@ entries:
     urls:
     - ocular-default-integrations-0.1.0.tgz
     version: 0.1.0
-generated: "2026-02-11T17:37:51.909730924Z"
+generated: "2026-02-18T17:35:32.754969199Z"
