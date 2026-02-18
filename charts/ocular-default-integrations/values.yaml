@@ -6,7 +6,7 @@ crawlers:
   # Image for default crawlers
   image:
     repository: "ghcr.io/crashappsec/ocular-default-crawlers"
-    tag: "v0.1.7-1-gf3f4eb8"
+    tag: "v0.1.8"
 # Default downloaders config
 downloaders:
   # Name of secret to read credentials from
@@ -14,7 +14,7 @@ downloaders:
   # Image for default downloaders
   image:
     repository: "ghcr.io/crashappsec/ocular-default-downloaders"
-    tag: "v0.1.7-1-gf3f4eb8"
+    tag: "v0.1.8"
 # Default uploaders config
 uploaders:
   # Name of secret to read credentials from
@@ -22,4 +22,4 @@ uploaders:
   # Image for edault uploaders
   image:
     repository: "ghcr.io/crashappsec/ocular-default-uploaders"
-    tag: "v0.1.7-1-gf3f4eb8"
+    tag: "v0.1.8"
