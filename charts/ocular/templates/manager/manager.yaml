@@ -62,6 +62,12 @@ spec:
                     {{- if .Values.certManager.enable }}
                     - --webhook-cert-path=/tmp/k8s-webhook-server/serving-certs
                     {{- end }}
+                  command:
+                    - /entrypoint
+                  env:
+                    {{- with .Values.manager.env }}
+                    {{- toYaml . | nindent 20 }}
+                    {{- end}}
                   envFrom:
                     - configMapRef:
                         name: {{ include "ocular.resourceName" (dict "suffix" "controller-manager-config" "context" $) }}

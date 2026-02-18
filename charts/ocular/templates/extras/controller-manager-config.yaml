@@ -1,8 +1,8 @@
 apiVersion: v1
 data:
-    OCULAR_EXTRACTOR_IMG: "{{ .Values.extractor.image.repository }}:{{ .Values.extractor.image.tag }}"
-    OCULAR_EXTRACTOR_PULLPOLICY: IfNotPresent
     OCULAR_SEARCH_CLUSTER_ROLE: ocular-search-cluster-role
+    OCULAR_SIDECAR_IMG: "{{ .Values.sidecar.image.repository }}:{{ .Values.sidecar.image.tag }}"
+    OCULAR_SIDECAR_PULLPOLICY: IfNotPresent
 kind: ConfigMap
 metadata:
     name: {{ include "ocular.resourceName" (dict "suffix" "controller-manager-config" "context" $) }}
