@@ -9,6 +9,8 @@ manager:
   labels: {}
   # Additional annotations to add to the controller manager deployment
   annotations: {}
+  command:
+    - /entrypoint
   args:
     - --leader-elect
   # Additional environment variables to add to the controller manager container
