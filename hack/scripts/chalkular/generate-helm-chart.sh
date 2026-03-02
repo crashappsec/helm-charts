@@ -50,7 +50,7 @@ CHALKULAR_ENV_FILE='' make -C "$CHALKULAR_REPO_ROOT" clean-helm
 # will read/write to the folder 'dist/chart' within the repository
 cp -r "$REPO_ROOT/charts/chalkular/" "$CHALKULAR_REPO_ROOT/dist/chart/"
 
-CHALKULAR_ENV_FILE='' CHALKULAR_VERSION=$(git -C "$CHALKULAR_REPO_ROOT" describe --tags --dirty=-dev) make -C "$CHALKULAR_REPO_ROOT" build-helm
+CHALKULAR_ENV_FILE='' CHALKULAR_VERSION=$(git -C "$CHALKULAR_REPO_ROOT" describe --tags) make -C "$CHALKULAR_REPO_ROOT" build-helm
 
 # Once the files are updated, copy them back
 rm -rf "$REPO_ROOT/charts/chalkular"
