@@ -215,6 +215,35 @@ entries:
       artifacthub.io/category: security
       artifacthub.io/license: GPL-3.0
     apiVersion: v2
+    appVersion: 0.1.8
+    created: "2026-03-02T20:20:47.402575477Z"
+    description: A Helm chart for deploying default ocular integrations
+    digest: a7a53f027bb3bbe5d6f7d06d22b7353896227128d0c0f003a5fd9808dca979b5
+    home: https://ocularproject.io
+    icon: https://ocularproject.io/favicon-32x32.png
+    keywords:
+    - git
+    - kubernetes
+    - scanning
+    - sast
+    - secrets
+    - sca
+    - security
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: bryce@crashoverride.com
+      name: Bryce Thuiot
+    name: ocular-default-integrations
+    sources:
+    - https://github.com/crashappsec/ocular-default-integrations
+    type: application
+    urls:
+    - ocular-default-integrations-0.1.8.tgz
+    version: 0.1.8
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/license: GPL-3.0
+    apiVersion: v2
     appVersion: 0.1.7
     created: "2026-02-03T18:19:40.202725376Z"
     description: A Helm chart for deploying default ocular integrations
@@ -407,4 +436,4 @@ entries:
     urls:
     - ocular-default-integrations-0.1.0.tgz
     version: 0.1.0
-generated: "2026-02-18T17:35:32.754969199Z"
+generated: "2026-03-02T20:20:47.402622475Z"
