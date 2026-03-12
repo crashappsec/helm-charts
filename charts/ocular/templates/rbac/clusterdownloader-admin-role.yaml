@@ -2,23 +2,23 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-    labels:
-        app.kubernetes.io/managed-by: {{ .Release.Service }}
-        app.kubernetes.io/name: {{ include "ocular.name" . }}
-        helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
-    name: {{ include "ocular.resourceName" (dict "suffix" "clusterdownloader-admin-role" "context" $) }}
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "ocular.name" . }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  name: {{ include "ocular.resourceName" (dict "suffix" "clusterdownloader-admin-role" "context" $) }}
 rules:
-    - apiGroups:
-        - ocular.crashoverride.run
-      resources:
-        - clusterdownloaders
-      verbs:
-        - '*'
-    - apiGroups:
-        - ocular.crashoverride.run
-      resources:
-        - clusterdownloaders/status
-      verbs:
-        - get
+- apiGroups:
+  - ocular.crashoverride.run
+  resources:
+  - clusterdownloaders
+  verbs:
+  - '*'
+- apiGroups:
+  - ocular.crashoverride.run
+  resources:
+  - clusterdownloaders/status
+  verbs:
+  - get
 {{- end }}
