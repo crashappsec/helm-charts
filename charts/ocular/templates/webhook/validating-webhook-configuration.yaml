@@ -1,207 +1,209 @@
+{{- if .Values.webhook.enable }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
-    annotations:
-        {{- if .Values.certManager.enable }}
-        cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ include "ocular.resourceName" (dict "suffix" "serving-cert" "context" $) }}
-        {{- end }}
-    name: {{ include "ocular.resourceName" (dict "suffix" "validating-webhook-configuration" "context" $) }}
+  annotations:
+    {{- if .Values.certManager.enable }}
+    cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ include "ocular.resourceName" (dict "suffix" "serving-cert" "context" $) }}
+    {{- end }}
+  name: {{ include "ocular.resourceName" (dict "suffix" "validating-webhook-configuration" "context" $) }}
 webhooks:
-    - admissionReviewVersions:
-        - v1
-      clientConfig:
-        service:
-            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
-            namespace: {{ .Release.Namespace }}
-            path: /validate-ocular-crashoverride-run-v1beta1-clustercrawler
-      failurePolicy: Fail
-      name: vclustercrawler-v1beta1.ocular.crashoverride.run
-      rules:
-        - apiGroups:
-            - ocular.crashoverride.run
-          apiVersions:
-            - v1beta1
-          operations:
-            - DELETE
-          resources:
-            - clustercrawlers
-      sideEffects: None
-    - admissionReviewVersions:
-        - v1
-      clientConfig:
-        service:
-            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
-            namespace: {{ .Release.Namespace }}
-            path: /validate-ocular-crashoverride-run-v1beta1-clusterdownloader
-      failurePolicy: Fail
-      name: vclusterdownloader-v1beta1.ocular.crashoverride.run
-      rules:
-        - apiGroups:
-            - ocular.crashoverride.run
-          apiVersions:
-            - v1beta1
-          operations:
-            - DELETE
-          resources:
-            - clusterdownloaders
-      sideEffects: None
-    - admissionReviewVersions:
-        - v1
-      clientConfig:
-        service:
-            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
-            namespace: {{ .Release.Namespace }}
-            path: /validate-ocular-crashoverride-run-v1beta1-clusteruploader
-      failurePolicy: Fail
-      name: vclusteruploader-v1beta1.ocular.crashoverride.run
-      rules:
-        - apiGroups:
-            - ocular.crashoverride.run
-          apiVersions:
-            - v1beta1
-          operations:
-            - DELETE
-          resources:
-            - clusteruploaders
-      sideEffects: None
-    - admissionReviewVersions:
-        - v1
-      clientConfig:
-        service:
-            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
-            namespace: {{ .Release.Namespace }}
-            path: /validate-ocular-crashoverride-run-v1beta1-crawler
-      failurePolicy: Fail
-      name: vcrawler-v1beta1.ocular.crashoverride.run
-      rules:
-        - apiGroups:
-            - ocular.crashoverride.run
-          apiVersions:
-            - v1beta1
-          operations:
-            - CREATE
-            - DELETE
-            - UPDATE
-          resources:
-            - crawlers
-      sideEffects: None
-    - admissionReviewVersions:
-        - v1
-      clientConfig:
-        service:
-            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
-            namespace: {{ .Release.Namespace }}
-            path: /validate-ocular-crashoverride-run-v1beta1-cronsearch
-      failurePolicy: Fail
-      name: vcronsearch-v1beta1.ocular.crashoverride.run
-      rules:
-        - apiGroups:
-            - ocular.crashoverride.run
-          apiVersions:
-            - v1beta1
-          operations:
-            - CREATE
-            - UPDATE
-          resources:
-            - cronsearches
-      sideEffects: None
-    - admissionReviewVersions:
-        - v1
-      clientConfig:
-        service:
-            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
-            namespace: {{ .Release.Namespace }}
-            path: /validate-ocular-crashoverride-run-v1beta1-downloader
-      failurePolicy: Fail
-      name: vdownloader-v1beta1.ocular.crashoverride.run
-      rules:
-        - apiGroups:
-            - ocular.crashoverride.run
-          apiVersions:
-            - v1beta1
-          operations:
-            - DELETE
-          resources:
-            - downloaders
-      sideEffects: None
-    - admissionReviewVersions:
-        - v1
-      clientConfig:
-        service:
-            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
-            namespace: {{ .Release.Namespace }}
-            path: /validate-ocular-crashoverride-run-v1beta1-pipeline
-      failurePolicy: Fail
-      name: vpipeline-v1beta1.ocular.crashoverride.run
-      rules:
-        - apiGroups:
-            - ocular.crashoverride.run
-          apiVersions:
-            - v1beta1
-          operations:
-            - CREATE
-            - UPDATE
-          resources:
-            - pipelines
-      sideEffects: None
-    - admissionReviewVersions:
-        - v1
-      clientConfig:
-        service:
-            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
-            namespace: {{ .Release.Namespace }}
-            path: /validate-ocular-crashoverride-run-v1beta1-profile
-      failurePolicy: Fail
-      name: vprofile-v1beta1.ocular.crashoverride.run
-      rules:
-        - apiGroups:
-            - ocular.crashoverride.run
-          apiVersions:
-            - v1beta1
-          operations:
-            - CREATE
-            - UPDATE
-            - DELETE
-          resources:
-            - profiles
-      sideEffects: None
-    - admissionReviewVersions:
-        - v1
-      clientConfig:
-        service:
-            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
-            namespace: {{ .Release.Namespace }}
-            path: /validate-ocular-crashoverride-run-v1beta1-search
-      failurePolicy: Fail
-      name: vsearch-v1beta1.ocular.crashoverride.run
-      rules:
-        - apiGroups:
-            - ocular.crashoverride.run
-          apiVersions:
-            - v1beta1
-          operations:
-            - CREATE
-            - UPDATE
-          resources:
-            - searches
-      sideEffects: None
-    - admissionReviewVersions:
-        - v1
-      clientConfig:
-        service:
-            name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
-            namespace: {{ .Release.Namespace }}
-            path: /validate-ocular-crashoverride-run-v1beta1-uploader
-      failurePolicy: Fail
-      name: vuploader-v1beta1.ocular.crashoverride.run
-      rules:
-        - apiGroups:
-            - ocular.crashoverride.run
-          apiVersions:
-            - v1beta1
-          operations:
-            - DELETE
-            - UPDATE
-          resources:
-            - uploaders
-      sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
+      namespace: {{ .Release.Namespace }}
+      path: /validate-ocular-crashoverride-run-v1beta1-clustercrawler
+  failurePolicy: Fail
+  name: vclustercrawler-v1beta1.ocular.crashoverride.run
+  rules:
+  - apiGroups:
+    - ocular.crashoverride.run
+    apiVersions:
+    - v1beta1
+    operations:
+    - DELETE
+    resources:
+    - clustercrawlers
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
+      namespace: {{ .Release.Namespace }}
+      path: /validate-ocular-crashoverride-run-v1beta1-clusterdownloader
+  failurePolicy: Fail
+  name: vclusterdownloader-v1beta1.ocular.crashoverride.run
+  rules:
+  - apiGroups:
+    - ocular.crashoverride.run
+    apiVersions:
+    - v1beta1
+    operations:
+    - DELETE
+    resources:
+    - clusterdownloaders
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
+      namespace: {{ .Release.Namespace }}
+      path: /validate-ocular-crashoverride-run-v1beta1-clusteruploader
+  failurePolicy: Fail
+  name: vclusteruploader-v1beta1.ocular.crashoverride.run
+  rules:
+  - apiGroups:
+    - ocular.crashoverride.run
+    apiVersions:
+    - v1beta1
+    operations:
+    - DELETE
+    resources:
+    - clusteruploaders
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
+      namespace: {{ .Release.Namespace }}
+      path: /validate-ocular-crashoverride-run-v1beta1-crawler
+  failurePolicy: Fail
+  name: vcrawler-v1beta1.ocular.crashoverride.run
+  rules:
+  - apiGroups:
+    - ocular.crashoverride.run
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - DELETE
+    - UPDATE
+    resources:
+    - crawlers
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
+      namespace: {{ .Release.Namespace }}
+      path: /validate-ocular-crashoverride-run-v1beta1-cronsearch
+  failurePolicy: Fail
+  name: vcronsearch-v1beta1.ocular.crashoverride.run
+  rules:
+  - apiGroups:
+    - ocular.crashoverride.run
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - cronsearches
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
+      namespace: {{ .Release.Namespace }}
+      path: /validate-ocular-crashoverride-run-v1beta1-downloader
+  failurePolicy: Fail
+  name: vdownloader-v1beta1.ocular.crashoverride.run
+  rules:
+  - apiGroups:
+    - ocular.crashoverride.run
+    apiVersions:
+    - v1beta1
+    operations:
+    - DELETE
+    resources:
+    - downloaders
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
+      namespace: {{ .Release.Namespace }}
+      path: /validate-ocular-crashoverride-run-v1beta1-pipeline
+  failurePolicy: Fail
+  name: vpipeline-v1beta1.ocular.crashoverride.run
+  rules:
+  - apiGroups:
+    - ocular.crashoverride.run
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - pipelines
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
+      namespace: {{ .Release.Namespace }}
+      path: /validate-ocular-crashoverride-run-v1beta1-profile
+  failurePolicy: Fail
+  name: vprofile-v1beta1.ocular.crashoverride.run
+  rules:
+  - apiGroups:
+    - ocular.crashoverride.run
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - profiles
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
+      namespace: {{ .Release.Namespace }}
+      path: /validate-ocular-crashoverride-run-v1beta1-search
+  failurePolicy: Fail
+  name: vsearch-v1beta1.ocular.crashoverride.run
+  rules:
+  - apiGroups:
+    - ocular.crashoverride.run
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - searches
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: {{ include "ocular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
+      namespace: {{ .Release.Namespace }}
+      path: /validate-ocular-crashoverride-run-v1beta1-uploader
+  failurePolicy: Fail
+  name: vuploader-v1beta1.ocular.crashoverride.run
+  rules:
+  - apiGroups:
+    - ocular.crashoverride.run
+    apiVersions:
+    - v1beta1
+    operations:
+    - DELETE
+    - UPDATE
+    resources:
+    - uploaders
+  sideEffects: None
+{{- end }}
