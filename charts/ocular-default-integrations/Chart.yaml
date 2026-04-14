@@ -8,12 +8,12 @@
 
 apiVersion: v2
 name: ocular-default-integrations
-version: 0.1.8
+version: 0.1.9
 kubeVersion: ">=1.26.0-0"
 description: A Helm chart for deploying default ocular integrations
 type: application
 icon: "https://ocularproject.io/favicon-32x32.png"
-appVersion: "0.1.8"
+appVersion: "0.1.9"
 home: https://ocularproject.io
 sources:
   - https://github.com/crashappsec/ocular-default-integrations
