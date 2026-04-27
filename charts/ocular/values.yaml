@@ -3,7 +3,7 @@ manager:
   replicas: 1
   image:
     repository: "ghcr.io/crashappsec/ocular-controller"
-    tag: "v0.2.6"
+    tag: "v0.3.0"
     pullPolicy: "IfNotPresent"
   # Additional labels to add to the controller manager deployment
   labels: {}
@@ -65,7 +65,7 @@ manager:
 sidecar:
   image:
     repository: "ghcr.io/crashappsec/ocular-sidecar"
-    tag: "v0.2.6"
+    tag: "v0.3.0"
     pullPolicy: IfNotPresent
 # Essential RBAC permissions (required for controller operation)
 # These include ServiceAccount, controller permissions, leader election, and metrics access
@@ -94,4 +94,5 @@ certManager:
 prometheus:
   enable: false
 webhook:
+  enable: true
   port: 9443
