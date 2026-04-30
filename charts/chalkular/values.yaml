@@ -13,7 +13,7 @@ manager:
   image:
     repository: ghcr.io/crashappsec/chalkular-controller
     pullPolicy: IfNotPresent
-    tag: v0.0.1
+    tag: v0.0.2
   ## Arguments
   ##
   args:
@@ -21,6 +21,10 @@ manager:
   ## Environment variables
   ##
   env: []
+  ## Env overrides (--set manager.envOverrides.VAR=value)
+  ## Same name in env above: this value takes precedence.
+  ##
+  envOverrides: {}
   ## Image pull secrets
   ##
   imagePullSecrets: []
@@ -106,11 +110,7 @@ webhook:
 ##
 prometheus:
   enable: false
-downloader:
-  image:
-    repository: ghcr.io/crashappsec/chalkular-downloader
-    pullPolicy: IfNotPresent
-    tag: v0.0.1
+# Configure intake methods for chalk reports
 intake:
   http:
     enable: false
@@ -119,3 +119,15 @@ intake:
   sqs:
     enable: false
     queue_url: ""
+# Configure downloader image
+downloader:
+  image:
+    repository: ghcr.io/crashappsec/chalkular-downloader
+    pullPolicy: IfNotPresent
+    tag: v0.0.2
+# Configure uploader image
+uploader:
+  image:
+    repository: ghcr.io/crashappsec/chalkular-uploader
+    pullPolicy: IfNotPresent
+    tag: v0.0.2

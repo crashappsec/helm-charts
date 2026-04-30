@@ -1,4 +1,4 @@
-{{- if .Values.webhook.enable }}
+{{- if .Values.intake.http.enable }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -7,14 +7,17 @@ metadata:
     app.kubernetes.io/name: {{ include "chalkular.name" . }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-  name: {{ include "chalkular.resourceName" (dict "suffix" "webhook-service" "context" $) }}
+    control-plane: controller-manager
+  name: {{ include "chalkular.resourceName" (dict "suffix" "report-http" "context" $) }}
   namespace: {{ .Release.Namespace }}
 spec:
   ports:
-  - port: 443
+  - name: https
+    port: {{ .Values.intake.http.port }}
     protocol: TCP
-    targetPort: {{ .Values.webhook.port }}
+    targetPort: {{ .Values.intake.http.port }}
   selector:
     app.kubernetes.io/name: {{ include "chalkular.name" . }}
     control-plane: controller-manager
-{{- end }}
+
+{{- end}}

@@ -1,7 +1,25 @@
+# -*- yaml -*-
 apiVersion: v2
 name: chalkular
-description: Chalkular provides a way for chalk to trigger Ocular pipelines
+description: Chalkular allows for chalk reports to trigger Ocular pipelines
 type: application
-version: 0.0.1
-appVersion: "0.0.1"
+version: 0.0.2
+appVersion: 0.0.2
 icon: "https://ocularproject.io/favicon-32x32.png"
+keywords:
+  - git
+  - kubernetes
+  - scanning
+  - sast
+  - secrets
+  - sca
+  - security
+home: https://ocularproject.io
+sources:
+  - https://github.com/crashappsec/chalkular
+maintainers:
+  - name: Bryce Thuiot
+    email: bryce@crashoverride.com
+annotations:
+  artifacthub.io/category: security
+  artifacthub.io/license: GPL-3.0

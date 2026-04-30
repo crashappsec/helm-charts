@@ -15,6 +15,8 @@ set -e
 
 CHALKULAR_REPO_ROOT=$(readlink -f "$REPO_ROOT/../chalkular")
 
+CHALKULAR_HELM_VERSION=0.0.0-dev
+
 while [[ $# -gt 0 ]]; do
   case $1 in
     -r|--repository)
@@ -22,7 +24,9 @@ while [[ $# -gt 0 ]]; do
       shift
       shift
       ;;
-    *)
+    -v|--version)
+      CHALKULAR_HELM_VERSION="$2"
+      shift
       shift
       ;;
   esac
@@ -40,17 +44,14 @@ if [ ! "$go_module" = "github.com/crashappsec/chalkular" ]; then
     exit 1
 fi
 
+export CHALKULAR_ENV_FILE=''
+
 # first clean the existing chart from the ocular repository
-CHALKULAR_ENV_FILE='' make -C "$CHALKULAR_REPO_ROOT" clean-helm
+make -C "$CHALKULAR_REPO_ROOT" clean-helm
 
-# Then we copy in the current chart from this repository, then run
-# the 'build-helm' target.
-# This is done because the kubebuilder command has logic of which existing
-# files to update and which to leave alone, and the helm-chart plugin
-# will read/write to the folder 'dist/chart' within the repository
-cp -r "$REPO_ROOT/charts/chalkular/" "$CHALKULAR_REPO_ROOT/dist/chart/"
-
-CHALKULAR_ENV_FILE='' CHALKULAR_VERSION=$(git -C "$CHALKULAR_REPO_ROOT" tag --sort=-creatordate | head -n 1) make -C "$CHALKULAR_REPO_ROOT" build-helm
+export CHALKULAR_HELM_VERSION="$CHALKULAR_HELM_VERSION"
+export CHALKULAR_VERSION="$(git -C "$CHALKULAR_REPO_ROOT" tag --sort=-creatordate | head -n 1)"
+make -C "$CHALKULAR_REPO_ROOT" build-helm
 
 # Once the files are updated, copy them back
 rm -rf "$REPO_ROOT/charts/chalkular"

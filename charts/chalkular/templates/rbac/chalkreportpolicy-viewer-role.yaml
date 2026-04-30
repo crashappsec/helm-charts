@@ -1,42 +1,26 @@
+{{- if .Values.rbacHelpers.enable }}
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
   labels:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/name: {{ include "chalkular.name" . }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-  name: {{ include "chalkular.resourceName" (dict "suffix" "leader-election-role" "context" $) }}
-  namespace: {{ .Release.Namespace }}
+  name: {{ include "chalkular.resourceName" (dict "suffix" "chalkreportpolicy-viewer-role" "context" $) }}
 rules:
 - apiGroups:
-  - ""
+  - chalk.ocular.crashoverride.run
   resources:
-  - configmaps
+  - chalkreportpolicies
   verbs:
   - get
   - list
   - watch
-  - create
-  - update
-  - patch
-  - delete
 - apiGroups:
-  - coordination.k8s.io
+  - chalk.ocular.crashoverride.run
   resources:
-  - leases
+  - chalkreportpolicies/status
   verbs:
   - get
-  - list
-  - watch
-  - create
-  - update
-  - patch
-  - delete
-- apiGroups:
-  - ""
-  resources:
-  - events
-  verbs:
-  - create
-  - patch
+{{- end }}
