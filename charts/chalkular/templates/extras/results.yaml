@@ -1,0 +1,19 @@
+apiVersion: ocular.crashoverride.run/v1beta1
+kind: ClusterUploader
+metadata:
+  name: {{ include "chalkular.resourceName" (dict "suffix" "results" "context" $) }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  container:
+    env: []
+    image: {{ .Values.uploader.image.repository }}:{{ .Values.uploader.image.tag }}
+    imagePullPolicy: {{ .Values.uploader.image.pullPolicy }}
+    name: results-extract
+    volumeMounts: []
+  parameters:
+  - description: The S3 bucket to upload to
+    name: S3_BUCKET
+  - default: us-east-1
+    description: AWS Region to use
+    name: S3_REGION
+  volumes: []

@@ -168,5 +168,12 @@ fabric.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/helm,dotenv,jetbrains+all,emacs,visualstudiocode
 
+##################
+# Custom ignores #
+##################
+
 # packaged charts
 out/
+
+# local binaries
+bin/

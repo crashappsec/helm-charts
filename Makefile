@@ -10,6 +10,8 @@ OCULAR_REPOSITORY_ROOT ?= ../ocular
 
 OCULAR_DI_REPOSITORY_ROOT ?= ../ocular-default-integrations
 
+CHALKULAR_REPOSITORY_ROOT ?= ../chalkular
+
 ENV_FILE ?= .env
 
 # Only if .env file is present
@@ -17,23 +19,31 @@ ifneq (,$(wildcard ${ENV_FILE}))
 	include ${ENV_FILE}
 endif
 
-define NEWLINE
-
-endef
-
 
 ###############
 # Development #
 ###############
 
+.PHONY: lint
+lint: license-eye
+	@"$(LICENSE_EYE)" header check
+
 .PHONY: lint-fix
-lint-fix:
+lint-fix: license-eye
 	@echo "Formatting license headers ..."
-	@license-eye header fix
+	@"$(LICENSE_EYE)" header fix
+
+
+GHASOURCEDIR := ./.github/workflows
+GHASOURCES := $(shell find $(GHASOURCEDIR) -name '*.yaml')
+.PHONY: gha-upgrade
+gha-upgrade: ratchet ## upgrades all pinned github actions used in any workflows
+	@"$(RATCHET)" upgrade $(GHASOURCES)
+
 
 # Package a helm chart as a .tar.gz
 helm-package-chart-%:
-	@helm package charts/$(@:helm-package-chart-%=%) -d out/$(@:helm-package-chart-%=%)
+	@helm package charts/$* -d out/$*
 
 .PHONY: helm-package-ocular
 helm-package-ocular:
@@ -42,7 +52,6 @@ helm-package-ocular:
 .PHONY: helm-package-ocular-default-integrations
 helm-package-ocular-default-integrations:
 	@$(MAKE) helm-package-chart-ocular-default-integrations
-
 
 .PHONY: helm-package-chalkular
 helm-package-chalkular:
@@ -75,8 +84,10 @@ helm-push-chalkular:
 	@$(MAKE) helm-push-chart-chalkular
 
 
-helm-generate-chart-%:
-	@hack/scripts/$(@:helm-generate-chart-%=%)/generate-helm-chart.sh --repository ../$(@:helm-generate-chart-%=%)
+helm-generate-chart-%: yq
+	@hack/scripts/$*/generate-helm-chart.sh \
+		--repository ../$* \
+		--version $(shell "$(YQ)" '.version' charts/$*/Chart.yaml)
 
 .PHONY: helm-generate-ocular
 helm-generate-ocular:
@@ -90,3 +101,51 @@ helm-generate-ocular-default-integrations:
 .PHONY: helm-generate-chalkular
 helm-generate-chalkular:
 	@$(MAKE) helm-generate-chart-chalkular
+
+
+## Location to install dependencies to
+LOCALBIN ?= $(shell pwd)/bin
+$(LOCALBIN):
+	mkdir -p "$(LOCALBIN)"
+
+## Tool Binaries
+YQ ?= $(LOCALBIN)/yq
+LICENSE_EYE ?= $(LOCALBIN)/license-eye
+RATCHET ?= $(LOCALBIN)/ratchet
+
+## Tool Versions
+YQ_VERSION ?= v4.53.2
+LICENSE_EYE_VERSION ?= v0.8.0
+RATCHET_VERSION ?= v0.11.4
+
+
+
+yq: $(YQ) ## Download yq locally if necessary.
+$(YQ): $(LOCALBIN)
+	$(call go-install-tool,$(YQ),github.com/mikefarah/yq/v4,$(YQ_VERSION))
+
+license-eye: $(LICENSE_EYE) ## Download skywalking-eyes locally if necessary.
+$(LICENSE_EYE): $(LOCALBIN)
+	$(call go-install-tool,$(LICENSE_EYE),github.com/apache/skywalking-eyes/cmd/license-eye,$(LICENSE_EYE_VERSION))
+
+ratchet: $(RATCHET) ## Download ratchet locally if necessary.
+$(RATCHET): $(LOCALBIN)
+	$(call go-install-tool,$(RATCHET),github.com/sethvargo/ratchet,$(RATCHET_VERSION))
+
+
+# go-install-tool will 'go install' any package with custom target and name of binary, if it doesn't exist
+# $1 - target path with name of binary
+# $2 - package url which can be installed
+# $3 - specific version of package
+define go-install-tool
+@[ -f "$(1)-$(3)" ] && [ "$$(readlink -- "$(1)" 2>/dev/null)" = "$(1)-$(3)" ] || { \
+set -e; \
+package=$(2)@$(3) ;\
+echo "Downloading $${package}" ;\
+rm -f $(1) ;\
+GOBIN=$(LOCALBIN) go install $${package} ;\
+mv $(1) $(1)-$(3) ;\
+} ;\
+ln -sf $$(realpath $(1)-$(3)) $(1)
+endef
+
