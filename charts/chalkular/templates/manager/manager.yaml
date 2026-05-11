@@ -77,8 +77,10 @@ spec:
         command:
         - /entrypoint
         env:
-          {{- with .Values.manager.env }}
-          {{- toYaml . | nindent 10 }}
+          {{- if .Values.manager.env }}
+          {{- toYaml .Values.manager.env | nindent 8 }}
+          {{- else}}
+          []
           {{- end}}
         image: "{{ .Values.manager.image.repository }}:{{ .Values.manager.image.tag }}"
         imagePullPolicy: {{ .Values.manager.image.pullPolicy }}
@@ -112,8 +114,8 @@ spec:
           {}
           {{- end }}
         volumeMounts:
-          {{- with .Values.manager.volumeMounts }}
-          {{- toYaml . | nindent 10}}
+          {{- if .Values.manager.volumeMounts }}
+          {{- toYaml .Values.manager.volumeMounts | nindent 8}}
           {{- end}}
         {{- if and .Values.certManager.enable .Values.metrics.enable }}
         - mountPath: /tmp/k8s-metrics-server/metrics-certs
@@ -134,8 +136,8 @@ spec:
       serviceAccountName: {{ include "chalkular.resourceName" (dict "suffix" "controller-manager" "context" $) }}
       terminationGracePeriodSeconds: 10
       volumes:
-        {{- with .Values.manager.volumes }}
-        {{- toYaml . | nindent 8}}
+        {{- if .Values.manager.volumes }}
+        {{- toYaml .Values.manager.volumes | nindent 6}}
         {{- end}}
       {{- if and .Values.certManager.enable .Values.metrics.enable }}
       - name: metrics-certs

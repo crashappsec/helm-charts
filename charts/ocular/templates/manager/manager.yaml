@@ -62,7 +62,12 @@ spec:
         {{- if .Values.certManager.enable }}
         - --webhook-cert-path=/tmp/k8s-webhook-server/serving-certs
         {{- end }}
-        env: {{- toYaml .Values.manager.env | nindent 10 }}
+        env:
+          {{- if .Values.manager.env }}
+          {{- toYaml .Values.manager.env | nindent 8 }}
+          {{- else}}
+          []
+          {{- end}}
         envFrom:
         - configMapRef:
             name: ocular-controller-manager-config
@@ -98,9 +103,9 @@ spec:
           {}
           {{- end }}
         volumeMounts:
-        {{- with .Values.manager.volumeMounts }}
-        {{- toYaml . | nindent 8}}
-        {{- end}}
+          {{- if .Values.manager.volumeMounts }}
+          {{- toYaml .Values.manager.volumeMounts | nindent 8}}
+          {{- end}}
         {{- if and .Values.certManager.enable .Values.metrics.enable }}
         - mountPath: /tmp/k8s-metrics-server/metrics-certs
           name: metrics-certs
@@ -120,9 +125,9 @@ spec:
       serviceAccountName: {{ include "ocular.resourceName" (dict "suffix" "controller-manager" "context" $) }}
       terminationGracePeriodSeconds: 10
       volumes:
-      {{- with .Values.manager.volumes }}
-      {{- toYaml . | nindent 6}}
-      {{- end}}
+        {{- if .Values.manager.volumes }}
+        {{- toYaml .Values.manager.volumes | nindent 6}}
+        {{- end}}
       {{- if and .Values.certManager.enable .Values.metrics.enable }}
       - name: metrics-certs
         secret:

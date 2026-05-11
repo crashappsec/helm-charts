@@ -3,8 +3,8 @@ apiVersion: v2
 name: chalkular
 description: Chalkular allows for chalk reports to trigger Ocular pipelines
 type: application
-version: 0.0.2
-appVersion: 0.0.2
+version: 0.0.3-beta.4
+appVersion: 0.0.3-beta.1
 icon: "https://ocularproject.io/favicon-32x32.png"
 keywords:
   - git

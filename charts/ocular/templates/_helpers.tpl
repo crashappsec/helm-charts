@@ -48,6 +48,3 @@ Dynamically calculates safe truncation to ensure total name length <= 63 chars.
 {{- printf "%s-%s" $fullname $suffix | trunc 63 | trimSuffix "-" }}
 {{- end }}
 {{- end }}
-
-
-

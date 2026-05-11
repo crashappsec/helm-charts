@@ -15,17 +15,24 @@ set -e
 
 OCULAR_REPO_ROOT=$(readlink -f "$REPO_ROOT/../ocular/")
 
+OCULAR_HELM_VERSION=0.0.0-dev
+
 while [[ $# -gt 0 ]]; do
-  case $1 in
-    -r|--repository)
-      OCULAR_REPO_ROOT="$(readlink -f "$2")"
-      shift
-      shift
-      ;;
-    *)
-      shift
-      ;;
-  esac
+    case $1 in
+	-r|--repository)
+	    OCULAR_REPO_ROOT="$(readlink -f "$2")"
+	    shift
+	    shift
+	    ;;
+	-v|--version)
+	    OCULAR_HELM_VERSION="$2"
+	    shift
+	    shift
+	    ;;
+	*)
+	    shift
+	    ;;
+    esac
 done
 
 
@@ -40,17 +47,14 @@ if [ ! "$go_module" = "github.com/crashappsec/ocular" ]; then
     exit 1
 fi
 
+export OCULAR_ENV_FILE=''
+
 # first clean the existing chart from the ocular repository
-OCULAR_ENV_FILE='' make -C "$OCULAR_REPO_ROOT" clean-helm
+make -C "$OCULAR_REPO_ROOT" clean-helm
 
-# Then we copy in the current chart from this repository, then run
-# the 'build-helm' target.
-# This is done because the kubebuilder command has logic of which existing
-# files to update and which to leave alone, and the helm-chart plugin
-# will read/write to the folder 'dist/chart' within the repository
-cp -r "$REPO_ROOT/charts/ocular/" "$OCULAR_REPO_ROOT/dist/chart/"
-
-OCULAR_ENV_FILE='' OCULAR_VERSION=$(git -C "$OCULAR_REPO_ROOT" tag --sort=-creatordate | head -n 1) make -C "$OCULAR_REPO_ROOT" build-helm
+export OCULAR_HELM_VERSION
+export OCULAR_VERSION=$(git -C "$OCULAR_REPO_ROOT" tag --sort=-creatordate | head -n 1)
+make -C "$OCULAR_REPO_ROOT" build-helm
 
 # Once the files are updated, copy them back
 rm -rf "$REPO_ROOT/charts/ocular"
