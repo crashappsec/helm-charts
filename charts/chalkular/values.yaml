@@ -13,7 +13,7 @@ manager:
   image:
     repository: ghcr.io/crashappsec/chalkular-controller
     pullPolicy: IfNotPresent
-    tag: v0.0.2
+    tag: v0.0.3-beta.1
   ## Arguments
   ##
   args:
@@ -124,10 +124,10 @@ downloader:
   image:
     repository: ghcr.io/crashappsec/chalkular-downloader
     pullPolicy: IfNotPresent
-    tag: v0.0.2
+    tag: v0.0.3-beta.1
 # Configure uploader image
 uploader:
   image:
     repository: ghcr.io/crashappsec/chalkular-uploader
     pullPolicy: IfNotPresent
-    tag: v0.0.2
+    tag: v0.0.3-beta.1
