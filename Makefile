@@ -83,7 +83,6 @@ helm-push-ocular-default-integrations:
 helm-push-chalkular:
 	@$(MAKE) helm-push-chart-chalkular
 
-
 helm-generate-chart-%: yq
 	@hack/scripts/$*/generate-helm-chart.sh \
 		--repository ../$* \

@@ -18,18 +18,21 @@ CHALKULAR_REPO_ROOT=$(readlink -f "$REPO_ROOT/../chalkular")
 CHALKULAR_HELM_VERSION=0.0.0-dev
 
 while [[ $# -gt 0 ]]; do
-  case $1 in
-    -r|--repository)
-      CHALKULAR_REPO_ROOT="$(readlink -f "$2")"
-      shift
-      shift
-      ;;
-    -v|--version)
-      CHALKULAR_HELM_VERSION="$2"
-      shift
-      shift
-      ;;
-  esac
+    case $1 in
+	-r|--repository)
+	    CHALKULAR_REPO_ROOT="$(readlink -f "$2")"
+	    shift
+	    shift
+	    ;;
+	-v|--version)
+	    CHALKULAR_HELM_VERSION="$2"
+	    shift
+	    shift
+	    ;;
+	*)
+	    shift
+	    ;;
+    esac
 done
 
 
