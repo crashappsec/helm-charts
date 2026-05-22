@@ -13,7 +13,7 @@ manager:
   image:
     repository: ghcr.io/crashappsec/chalkular-controller
     pullPolicy: IfNotPresent
-    tag: v0.0.2
+    tag: v0.0.3
   ## Arguments
   ##
   args:
@@ -75,6 +75,10 @@ manager:
   ## Manager pod's tolerations
   ##
   tolerations: []
+  # Configure manager service account
+  serviceaccount:
+    annoations: {}
+    labels: {}
 ## Helper RBAC roles for managing custom resources
 ##
 rbacHelpers:
@@ -118,16 +122,17 @@ intake:
     secure: true
   sqs:
     enable: false
-    queue_url: ""
+    queueURL: ""
+    parser: s3-event
 # Configure downloader image
 downloader:
   image:
     repository: ghcr.io/crashappsec/chalkular-downloader
     pullPolicy: IfNotPresent
-    tag: v0.0.2
+    tag: v0.0.3
 # Configure uploader image
 uploader:
   image:
     repository: ghcr.io/crashappsec/chalkular-uploader
     pullPolicy: IfNotPresent
-    tag: v0.0.2
+    tag: v0.0.3

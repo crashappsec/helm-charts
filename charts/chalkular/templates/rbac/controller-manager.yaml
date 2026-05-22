@@ -1,7 +1,15 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  annotations:
+    {{- range $key, $val := .Values.manager.serviceaccount.annotations }}
+    {{ $key }}: {{ $val | quote }}
+    {{- end}}
+    chalk.ocular.crashoverride.run/type: controller-manager
   labels:
+    {{- range $key, $val := .Values.manager.serviceaccount.labels }}
+    {{ $key }}: {{ $val | quote }}
+    {{- end}}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/name: {{ include "chalkular.name" . }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
