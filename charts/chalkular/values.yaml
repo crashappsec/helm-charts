@@ -13,7 +13,7 @@ manager:
   image:
     repository: ghcr.io/crashappsec/chalkular-controller
     pullPolicy: IfNotPresent
-    tag: v0.0.3
+    tag: v0.0.4
   ## Arguments
   ##
   args:
@@ -124,15 +124,17 @@ intake:
     enable: false
     queueURL: ""
     parser: s3-event
+  maxPipelinesPerPolicy: 10
+  rejectReportPipelineThreshold: 100
 # Configure downloader image
 downloader:
   image:
     repository: ghcr.io/crashappsec/chalkular-downloader
     pullPolicy: IfNotPresent
-    tag: v0.0.3
+    tag: v0.0.4
 # Configure uploader image
 uploader:
   image:
     repository: ghcr.io/crashappsec/chalkular-uploader
     pullPolicy: IfNotPresent
-    tag: v0.0.3
+    tag: v0.0.4
