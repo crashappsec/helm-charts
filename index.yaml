@@ -5,6 +5,34 @@ entries:
       artifacthub.io/category: security
       artifacthub.io/license: GPL-3.0
     apiVersion: v2
+    appVersion: 0.0.4
+    created: "2026-05-28T13:57:05.113811-04:00"
+    description: Chalkular allows for chalk reports to trigger Ocular pipelines
+    digest: 8a6be8c194fbbc7a363089709b1919c700f900984e6cf69699aefd88a7d28053
+    home: https://ocularproject.io
+    icon: https://ocularproject.io/favicon-32x32.png
+    keywords:
+    - git
+    - kubernetes
+    - scanning
+    - sast
+    - secrets
+    - sca
+    - security
+    maintainers:
+    - email: bryce@crashoverride.com
+      name: Bryce Thuiot
+    name: chalkular
+    sources:
+    - https://github.com/crashappsec/chalkular
+    type: application
+    urls:
+    - chalkular-0.0.4.tgz
+    version: 0.0.4
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/license: GPL-3.0
+    apiVersion: v2
     appVersion: 0.0.3
     created: "2026-05-26T09:20:33.014002-04:00"
     description: Chalkular allows for chalk reports to trigger Ocular pipelines
@@ -74,9 +102,9 @@ entries:
       artifacthub.io/license: GPL-3.0
     apiVersion: v2
     appVersion: 0.3.1
-    created: "2026-05-26T09:20:34.08734-04:00"
+    created: "2026-05-28T13:57:05.142217-04:00"
     description: An API for mass scanning static software assets
-    digest: 3692768ebdedbf0a56c4ebfc7ac34012dcd936159d21a41dcb456ae2c2eabde6
+    digest: 6f0309639bdc13f2a1f823c207f4955e6da8df1fcd4e46b32799406242579f68
     home: https://ocularproject.io
     icon: https://ocularproject.io/favicon-32x32.png
     keywords:
@@ -579,4 +607,4 @@ entries:
     urls:
     - ocular-default-integrations-0.1.0.tgz
     version: 0.1.0
-generated: "2026-05-26T09:20:34.995209-04:00"
+generated: "2026-05-28T13:57:05.109606-04:00"
