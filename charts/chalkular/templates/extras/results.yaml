@@ -1,3 +1,7 @@
+
+{{- $values := (tpl (.Values | toYaml) $) | fromYaml }}
+{{- $values := (tpl ($values | toYaml) $) | fromYaml }}
+---
 apiVersion: ocular.crashoverride.run/v1beta1
 kind: ClusterUploader
 metadata:
@@ -6,8 +10,8 @@ metadata:
 spec:
   container:
     env: []
-    image: {{ .Values.uploader.image.repository }}:{{ .Values.uploader.image.tag }}
-    imagePullPolicy: {{ .Values.uploader.image.pullPolicy }}
+    image: {{ $values.uploader.image.repository }}:{{ $values.uploader.image.tag }}
+    imagePullPolicy: {{ $values.uploader.image.pullPolicy }}
     name: results-extract
     volumeMounts: []
   parameters:
