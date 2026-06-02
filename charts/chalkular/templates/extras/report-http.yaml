@@ -1,4 +1,8 @@
-{{- if .Values.intake.http.enable }}
+
+{{- $values := (tpl (.Values | toYaml) $) | fromYaml }}
+{{- $values := (tpl ($values | toYaml) $) | fromYaml }}
+---
+{{- if $values.intake.http.enable }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -13,9 +17,9 @@ metadata:
 spec:
   ports:
   - name: https
-    port: {{ .Values.intake.http.port }}
+    port: {{ $values.intake.http.port }}
     protocol: TCP
-    targetPort: {{ .Values.intake.http.port }}
+    targetPort: {{ $values.intake.http.port }}
   selector:
     app.kubernetes.io/name: {{ include "chalkular.name" . }}
     control-plane: controller-manager

@@ -18,9 +18,6 @@ spec:
   - chalk.json
   parameters:
   - default: ""
-    description: Which platform to download for the image
-    name: PLATFORM
-  - default: ""
     description: If set to a non-empty value, registry connection uses http
     name: INSECURE_REGISTRY
   volumes: []

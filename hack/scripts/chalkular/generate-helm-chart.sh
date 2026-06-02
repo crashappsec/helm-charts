@@ -50,11 +50,11 @@ fi
 export CHALKULAR_ENV_FILE=''
 
 # first clean the existing chart from the ocular repository
-make -C "$CHALKULAR_REPO_ROOT" clean-helm
+make -C "$CHALKULAR_REPO_ROOT" helm-clean
 
 export CHALKULAR_HELM_VERSION="$CHALKULAR_HELM_VERSION"
 export CHALKULAR_VERSION="$(git -C "$CHALKULAR_REPO_ROOT" tag --sort=-creatordate | head -n 1)"
-make -C "$CHALKULAR_REPO_ROOT" build-helm
+make -C "$CHALKULAR_REPO_ROOT" helm-build
 
 # Once the files are updated, copy them back
 rm -rf "$REPO_ROOT/charts/chalkular"
