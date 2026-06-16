@@ -13,7 +13,7 @@ manager:
   image:
     repository: ghcr.io/crashappsec/ocular-controller
     pullPolicy: IfNotPresent
-    tag: v0.3.2
+    tag: v{{ .Chart.AppVersion }}
   ## Arguments
   ##
   args:
@@ -117,4 +117,4 @@ sidecar:
   image:
     repository: ghcr.io/crashappsec/ocular-sidecar
     pullPolicy: IfNotPresent
-    tag: v0.3.2
+    tag: v{{ .Chart.AppVersion }}
