@@ -13,19 +13,19 @@ REPO_ROOT=$(readlink -f "$SCRIPT_DIR/../../../")
 
 set -e
 
-CHALKULAR_REPO_ROOT=$(readlink -f "$REPO_ROOT/../chalkular")
+OCULAR_REPO_ROOT=$(readlink -f "$REPO_ROOT/../ocular/")
 
-CHALKULAR_HELM_VERSION=0.0.0-dev
+OCULAR_HELM_VERSION=0.0.0-dev
 
 while [[ $# -gt 0 ]]; do
     case $1 in
 	-r|--repository)
-	    CHALKULAR_REPO_ROOT="$(readlink -f "$2")"
+	    OCULAR_REPO_ROOT="$(readlink -f "$2")"
 	    shift
 	    shift
 	    ;;
 	-v|--version)
-	    CHALKULAR_HELM_VERSION="$2"
+	    OCULAR_HELM_VERSION="$2"
 	    shift
 	    shift
 	    ;;
@@ -36,27 +36,27 @@ while [[ $# -gt 0 ]]; do
 done
 
 
-if [ ! -d "$CHALKULAR_REPO_ROOT" ]; then
-    echo "'$CHALKULAR_REPO_ROOT' is not a directory"
+if [ ! -d "$OCULAR_REPO_ROOT" ]; then
+    echo "'$OCULAR_REPO_ROOT' is not a directory"
 fi
 
-go_module=$(cd "$CHALKULAR_REPO_ROOT" &>/dev/null && go list)
+go_module=$(cd "$OCULAR_REPO_ROOT" &>/dev/null && go list)
 
-if [ ! "$go_module" = "github.com/crashappsec/chalkular" ]; then
-    echo "ERROR: path '$go_module' is not the chalkular repository root" >&2
+if [ ! "$go_module" = "github.com/crashappsec/ocular" ]; then
+    echo "ERROR: path '$(pwd)' is not the ocular repository root" >&2
     exit 1
 fi
 
-export CHALKULAR_ENV_FILE=''
+export OCULAR_ENV_FILE=''
 
 # first clean the existing chart from the ocular repository
-make -C "$CHALKULAR_REPO_ROOT" helm-clean
+make -C "$OCULAR_REPO_ROOT" clean-helm
 
-export CHALKULAR_HELM_VERSION="$CHALKULAR_HELM_VERSION"
-export CHALKULAR_VERSION="$(git -C "$CHALKULAR_REPO_ROOT" tag --sort=-creatordate | head -n 1)"
-make -C "$CHALKULAR_REPO_ROOT" helm-build
+export OCULAR_HELM_VERSION
+export OCULAR_VERSION="${OCULAR_VERSION:-$(git -C "$OCULAR_REPO_ROOT" tag --sort=-creatordate | head -n 1)}"
+make -C "$OCULAR_REPO_ROOT" helm-build
 
 # Once the files are updated, copy them back
-rm -rf "$REPO_ROOT/charts/chalkular"
-cp -r "$CHALKULAR_REPO_ROOT/dist/chart/" "$REPO_ROOT/charts/chalkular"
+rm -rf "$REPO_ROOT/charts/ocular"
+cp -r "$OCULAR_REPO_ROOT/dist/chart/" "$REPO_ROOT/charts/ocular/"
 
