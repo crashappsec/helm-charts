@@ -1,3 +1,6 @@
+{{- $values := (tpl (.Values | toYaml) $) | fromYaml }}
+{{- $values := (tpl ($values | toYaml) $) | fromYaml }}
+---
 ---
 apiVersion: ocular.crashoverride.run/v1beta1
 kind: ClusterDownloader
@@ -10,21 +13,21 @@ spec:
         valueFrom:
           secretKeyRef:
             key: github-app-private-key
-            name: "{{ .Values.downloaders.secretName }}"
+            name: "{{ $values.downloaders.secretName }}"
             optional: true
       - name: GITHUB_APP_ID
         valueFrom:
           secretKeyRef:
             key: github-app-id
-            name: "{{ .Values.downloaders.secretName }}"
+            name: "{{ $values.downloaders.secretName }}"
             optional: true
       - name: GITHUB_TOKEN
         valueFrom:
           secretKeyRef:
             key: github-token
-            name: "{{ .Values.downloaders.secretName }}"
+            name: "{{ $values.downloaders.secretName }}"
             optional: true
-    image: '{{ .Values.downloaders.image.repository }}:{{ .Values.downloaders.image.tag }}'
+    image: '{{ $values.downloaders.image.repository }}:{{ $values.downloaders.image.tag }}'
     name: git
     resources: {}
     volumeMounts:
@@ -38,4 +41,4 @@ spec:
     - name: git-file-secrets
       secret:
         optional: true
-        secretName: "{{ .Values.downloaders.secretName }}"
+        secretName: "{{ $values.downloaders.secretName }}"

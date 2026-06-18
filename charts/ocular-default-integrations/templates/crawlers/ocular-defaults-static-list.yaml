@@ -1,3 +1,6 @@
+{{- $values := (tpl (.Values | toYaml) $) | fromYaml }}
+{{- $values := (tpl ($values | toYaml) $) | fromYaml }}
+---
 ---
 apiVersion: ocular.crashoverride.run/v1beta1
 kind: ClusterCrawler
@@ -5,7 +8,7 @@ metadata:
   name: ocular-defaults-static-list
 spec:
   container:
-    image: '{{ .Values.crawlers.image.repository }}:{{ .Values.crawlers.image.tag }}'
+    image: '{{ $values.crawlers.image.repository }}:{{ $values.crawlers.image.tag }}'
     name: static-list
     resources: {}
   parameters:

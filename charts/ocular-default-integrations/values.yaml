@@ -1,25 +1,20 @@
-
-# default crawlers config
+# configuration of crawlers
 crawlers:
-  # Name of secret to read credentials from
   secretName: "crawler-secrets"
-  # Image for default crawlers
   image:
     repository: "ghcr.io/crashappsec/ocular-default-crawlers"
-    tag: "v0.1.9"
-# Default downloaders config
+    tag: "v{{ .Chart.AppVersion }}"
+
+# configuration of downloaders
 downloaders:
-  # Name of secret to read credentials from
   secretName: "downloader-secrets"
-  # Image for default downloaders
   image:
     repository: "ghcr.io/crashappsec/ocular-default-downloaders"
-    tag: "v0.1.9"
-# Default uploaders config
+    tag: "v{{ .Chart.AppVersion }}"
+
+# Configuration for uploaders
 uploaders:
-  # Name of secret to read credentials from
   secretName: "uploader-secrets"
-  # Image for edault uploaders
   image:
     repository: "ghcr.io/crashappsec/ocular-default-uploaders"
-    tag: "v0.1.9"
+    tag: "v{{ .Chart.AppVersion }}"

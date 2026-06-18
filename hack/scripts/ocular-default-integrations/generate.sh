@@ -15,17 +15,25 @@ set -e
 
 OCULAR_DI_REPO_ROOT=$(readlink -f "$REPO_ROOT/../ocular-default-integrations/")
 
+
+OCULAR_DEFAULTS_HELM_VERSION=0.0.0-dev
+
 while [[ $# -gt 0 ]]; do
-  case $1 in
-    -r|--repository)
-      OCULAR_DI_REPO_ROOT="$(readlink -f "$2")"
-      shift
-      shift
-      ;;
-    *)
-      shift
-      ;;
-  esac
+    case $1 in
+	-r|--repository)
+	    OCULAR_DI_REPO_ROOT="$(readlink -f "$2")"
+	    shift
+	    shift
+	    ;;
+	-v|--version)
+	    OCULAR_DEFAULTS_HELM_VERSION="$2"
+	    shift
+	    shift
+	    ;;
+	*)
+	    shift
+	    ;;
+    esac
 done
 
 
@@ -50,7 +58,11 @@ OCULAR_ENV_FILE='' make -C "$OCULAR_DI_REPO_ROOT" clean-helm
 # will read/write to the folder 'dist/chart' within the repository
 cp -r "$REPO_ROOT/charts/ocular-default-integrations/" "$OCULAR_DI_REPO_ROOT/dist/chart/"
 
-OCULAR_ENV_FILE='' OCULAR_DEFAULTS_VERSION=$(git -C "$OCULAR_DI_REPO_ROOT" tag --sort=-creatordate | head -n 1) make -C "$OCULAR_DI_REPO_ROOT" helm-build
+
+export OCULAR_DEFAULTS_HELM_VERSION
+export OCULAR_DEFAULTS_VERSION=$(git -C "$OCULAR_DI_REPO_ROOT" tag --sort=-creatordate | head -n 1)
+
+OCULAR_ENV_FILE='' make -C "$OCULAR_DI_REPO_ROOT" helm-build
 
 # Once the files are updated, copy them back
 rm -rf "$REPO_ROOT/charts/ocular-default-integrations"
