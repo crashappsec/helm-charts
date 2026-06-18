@@ -1,8 +1,12 @@
+
+{{- $values := (tpl (.Values | toYaml) $) | fromYaml }}
+{{- $values := (tpl ($values | toYaml) $) | fromYaml }}
+---
 apiVersion: v1
 data:
   OCULAR_SEARCH_CLUSTER_ROLE: ocular-search-cluster-role
-  OCULAR_SIDECAR_IMG: {{ .Values.sidecar.image.repository }}:{{ .Values.sidecar.image.tag }}
-  OCULAR_SIDECAR_PULLPOLICY: {{ .Values.sidecar.image.pullPolicy }}
+  OCULAR_SIDECAR_IMG: {{ $values.sidecar.image.repository }}:{{ $values.sidecar.image.tag }}
+  OCULAR_SIDECAR_PULLPOLICY: {{ $values.sidecar.image.pullPolicy }}
 kind: ConfigMap
 metadata:
   name: {{ include "ocular.resourceName" (dict "suffix" "controller-manager-config" "context" $) }}

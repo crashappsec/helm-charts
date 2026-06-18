@@ -1,3 +1,6 @@
+{{- $values := (tpl (.Values | toYaml) $) | fromYaml }}
+{{- $values := (tpl ($values | toYaml) $) | fromYaml }}
+---
 apiVersion: ocular.crashoverride.run/v1beta1
 kind: ClusterCrawler
 metadata:
@@ -9,9 +12,9 @@ spec:
         valueFrom:
           secretKeyRef:
             key: dockerhub-token
-            name: "{{ .Values.crawlers.secretName }}"
+            name: "{{ $values.crawlers.secretName }}"
             optional: true
-    image: '{{ .Values.crawlers.image.repository }}:{{ .Values.crawlers.image.tag }}'
+    image: '{{ $values.crawlers.image.repository }}:{{ $values.crawlers.image.tag }}'
     name: dockerhub
     resources: {}
   parameters:

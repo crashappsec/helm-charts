@@ -1,3 +1,6 @@
+{{- $values := (tpl (.Values | toYaml) $) | fromYaml }}
+{{- $values := (tpl ($values | toYaml) $) | fromYaml }}
+---
 ---
 apiVersion: ocular.crashoverride.run/v1beta1
 kind: ClusterDownloader
@@ -10,8 +13,8 @@ spec:
         valueFrom:
           secretKeyRef:
             key: downloader-gcs-credentials
-            name: "{{ .Values.downloaders.secretName }}"
+            name: "{{ $values.downloaders.secretName }}"
             optional: true
-    image: '{{ .Values.downloaders.image.repository }}:{{ .Values.downloaders.image.tag }}'
+    image: '{{ $values.downloaders.image.repository }}:{{ $values.downloaders.image.tag }}'
     name: gcs
     resources: {}

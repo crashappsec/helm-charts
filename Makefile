@@ -12,6 +12,10 @@ OCULAR_DI_REPOSITORY_ROOT ?= ../ocular-default-integrations
 
 CHALKULAR_REPOSITORY_ROOT ?= ../chalkular
 
+export OCULAR_VERSION
+export CHALKULAR_VERSION
+export OCULAR_DI_VERSION
+
 ENV_FILE ?= .env
 
 # Only if .env file is present
@@ -84,7 +88,7 @@ helm-push-chalkular:
 	@$(MAKE) helm-push-chart-chalkular
 
 helm-generate-chart-%: yq
-	@hack/scripts/$*/generate-helm-chart.sh \
+	@hack/scripts/$*/generate.sh \
 		--repository ../$* \
 		--version $(shell "$(YQ)" '.version' charts/$*/Chart.yaml)
 

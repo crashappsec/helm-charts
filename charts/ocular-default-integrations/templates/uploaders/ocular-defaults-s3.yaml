@@ -1,10 +1,13 @@
+{{- $values := (tpl (.Values | toYaml) $) | fromYaml }}
+{{- $values := (tpl ($values | toYaml) $) | fromYaml }}
+---
 apiVersion: ocular.crashoverride.run/v1beta1
 kind: ClusterUploader
 metadata:
   name: ocular-defaults-s3
 spec:
   container:
-    image: '{{ .Values.uploaders.image.repository }}:{{ .Values.uploaders.image.tag }}'
+    image: '{{ $values.uploaders.image.repository }}:{{ $values.uploaders.image.tag }}'
     name: s3
     resources: {}
     volumeMounts:
@@ -28,4 +31,4 @@ spec:
     - name: s3-file-secrets
       secret:
         optional: true
-        secretName: "{{ .Values.uploaders.secretName }}"
+        secretName: "{{ $values.uploaders.secretName }}"

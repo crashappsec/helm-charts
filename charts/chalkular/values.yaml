@@ -13,7 +13,7 @@ manager:
   image:
     repository: ghcr.io/crashappsec/chalkular-controller
     pullPolicy: IfNotPresent
-    tag: v0.0.4
+    tag: v{{ .Chart.AppVersion }}
   ## Arguments
   ##
   args:
@@ -131,10 +131,10 @@ downloader:
   image:
     repository: ghcr.io/crashappsec/chalkular-downloader
     pullPolicy: IfNotPresent
-    tag: v0.0.4
+    tag: v{{ .Chart.AppVersion }}
 # Configure uploader image
 uploader:
   image:
     repository: ghcr.io/crashappsec/chalkular-uploader
     pullPolicy: IfNotPresent
-    tag: v0.0.4
+    tag: v{{ .Chart.AppVersion }}

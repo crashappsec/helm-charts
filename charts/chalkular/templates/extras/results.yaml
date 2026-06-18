@@ -1,3 +1,7 @@
+
+{{- $values := (tpl (.Values | toYaml) $) | fromYaml }}
+{{- $values := (tpl ($values | toYaml) $) | fromYaml }}
+---
 apiVersion: ocular.crashoverride.run/v1beta1
 kind: ClusterUploader
 metadata:
@@ -5,9 +9,15 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   container:
-    env: []
-    image: {{ .Values.uploader.image.repository }}:{{ .Values.uploader.image.tag }}
-    imagePullPolicy: {{ .Values.uploader.image.pullPolicy }}
+    env:
+    - name: CHALKULAR_INGEST_TOKEN
+      valueFrom:
+        secretKeyRef:
+          key: ingest-token
+          name: {{ include "chalkular.resourceName" (dict "suffix" "secrets" "context" $) }}
+          optional: true
+    image: {{ $values.uploader.image.repository }}:{{ $values.uploader.image.tag }}
+    imagePullPolicy: {{ $values.uploader.image.pullPolicy }}
     name: results-extract
     volumeMounts: []
   parameters:
@@ -16,4 +26,19 @@ spec:
   - default: us-east-1
     description: AWS Region to use
     name: S3_REGION
+  - default: ""
+    description: a prefix to append to all objects created
+    name: S3_PREFIX
+  - default: ""
+    description: The workspace ID that the report belongs to
+    name: WORKSPACE_ID
+  - default: ""
+    description: The action ID of the report
+    name: ACTION_ID
+  - default: ""
+    description: The metadata ID of the resource scanned
+    name: METADATA_ID
+  - default: ""
+    description: The host for the ingest, if empty upload is skipped
+    name: INGEST_HOST
   volumes: []

@@ -1,3 +1,7 @@
+
+{{- $values := (tpl (.Values | toYaml) $) | fromYaml }}
+{{- $values := (tpl ($values | toYaml) $) | fromYaml }}
+---
 apiVersion: ocular.crashoverride.run/v1beta1
 kind: ClusterDownloader
 metadata:
@@ -6,16 +10,13 @@ metadata:
 spec:
   container:
     env: []
-    image: {{ .Values.downloader.image.repository }}:{{ .Values.downloader.image.tag }}
-    imagePullPolicy: {{ .Values.downloader.image.pullPolicy }}
+    image: {{ $values.downloader.image.repository }}:{{ $values.downloader.image.tag }}
+    imagePullPolicy: {{ $values.downloader.image.pullPolicy }}
     name: chalkmark-extract
     volumeMounts: []
   metadataFiles:
   - chalk.json
   parameters:
-  - default: ""
-    description: Which platform to download for the image
-    name: PLATFORM
   - default: ""
     description: If set to a non-empty value, registry connection uses http
     name: INSECURE_REGISTRY

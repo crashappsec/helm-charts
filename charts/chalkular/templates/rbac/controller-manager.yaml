@@ -1,13 +1,17 @@
+
+{{- $values := (tpl (.Values | toYaml) $) | fromYaml }}
+{{- $values := (tpl ($values | toYaml) $) | fromYaml }}
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   annotations:
-    {{- range $key, $val := .Values.manager.serviceaccount.annotations }}
+    {{- range $key, $val := $values.manager.serviceaccount.annotations }}
     {{ $key }}: {{ $val | quote }}
     {{- end}}
     chalk.ocular.crashoverride.run/type: controller-manager
   labels:
-    {{- range $key, $val := .Values.manager.serviceaccount.labels }}
+    {{- range $key, $val := $values.manager.serviceaccount.labels }}
     {{ $key }}: {{ $val | quote }}
     {{- end}}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
