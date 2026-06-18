@@ -5,6 +5,34 @@ entries:
       artifacthub.io/category: security
       artifacthub.io/license: GPL-3.0
     apiVersion: v2
+    appVersion: 0.0.5
+    created: "2026-06-18T09:58:25.754635-04:00"
+    description: Chalkular allows for chalk reports to trigger Ocular pipelines
+    digest: 85c96cb3bd2c5756207df1501e8dbd94abfb571db21f0040a92f924feaf69199
+    home: https://ocularproject.io
+    icon: https://ocularproject.io/favicon-32x32.png
+    keywords:
+    - git
+    - kubernetes
+    - scanning
+    - sast
+    - secrets
+    - sca
+    - security
+    maintainers:
+    - email: bryce@crashoverride.com
+      name: Bryce Thuiot
+    name: chalkular
+    sources:
+    - https://github.com/crashappsec/chalkular
+    type: application
+    urls:
+    - chalkular-0.0.5.tgz
+    version: 0.0.5
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/license: GPL-3.0
+    apiVersion: v2
     appVersion: 0.0.4
     created: "2026-05-28T13:57:05.113811-04:00"
     description: Chalkular allows for chalk reports to trigger Ocular pipelines
@@ -97,6 +125,35 @@ entries:
     - chalkular-0.0.1.tgz
     version: 0.0.1
   ocular:
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/license: GPL-3.0
+    apiVersion: v2
+    appVersion: 0.3.2
+    created: "2026-06-18T09:58:26.928979-04:00"
+    description: An API for mass scanning static software assets
+    digest: 610c8907c0822124c849082bbf5a7da047750ae2badf1e29be3d11e961d5f3bd
+    home: https://ocularproject.io
+    icon: https://ocularproject.io/favicon-32x32.png
+    keywords:
+    - git
+    - kubernetes
+    - scanning
+    - sast
+    - secrets
+    - sca
+    - security
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: bryce@crashoverride.com
+      name: Bryce Thuiot
+    name: ocular
+    sources:
+    - https://github.com/crashappsec/ocular
+    type: application
+    urls:
+    - ocular-0.4.9.tgz
+    version: 0.4.9
   - annotations:
       artifacthub.io/category: security
       artifacthub.io/license: GPL-3.0
@@ -357,6 +414,35 @@ entries:
       artifacthub.io/category: security
       artifacthub.io/license: GPL-3.0
     apiVersion: v2
+    appVersion: 0.2.0
+    created: "2026-06-18T09:58:27.947907-04:00"
+    description: A Helm chart for deploying default ocular integrations
+    digest: a5000b25f09006b183a4da4829f45476e6d56680428e40be3b04963414f98394
+    home: https://ocularproject.io
+    icon: https://ocularproject.io/favicon-32x32.png
+    keywords:
+    - git
+    - kubernetes
+    - scanning
+    - sast
+    - secrets
+    - sca
+    - security
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: bryce@crashoverride.com
+      name: Bryce Thuiot
+    name: ocular-default-integrations
+    sources:
+    - https://github.com/crashappsec/ocular-default-integrations
+    type: application
+    urls:
+    - ocular-default-integrations-0.2.0.tgz
+    version: 0.2.0
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/license: GPL-3.0
+    apiVersion: v2
     appVersion: 0.1.9
     created: "2026-04-27T16:32:20.530095989Z"
     description: A Helm chart for deploying default ocular integrations
@@ -607,4 +693,4 @@ entries:
     urls:
     - ocular-default-integrations-0.1.0.tgz
     version: 0.1.0
-generated: "2026-05-28T13:57:05.109606-04:00"
+generated: "2026-06-18T09:58:27.948132-04:00"
