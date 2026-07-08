@@ -8,6 +8,8 @@ metadata:
   name: ocular-defaults-git
 spec:
   container:
+    command:
+      - /entrypoint
     env:
       - name: GITHUB_APP_PRIVATE_KEY
         valueFrom:
@@ -28,6 +30,7 @@ spec:
             name: "{{ $values.downloaders.secretName }}"
             optional: true
     image: '{{ $values.downloaders.image.repository }}:{{ $values.downloaders.image.tag }}'
+    imagePullPolicy: IfNotPresent
     name: git
     resources: {}
     volumeMounts:

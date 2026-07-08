@@ -7,7 +7,10 @@ metadata:
   name: ocular-defaults-s3
 spec:
   container:
+    command:
+      - /entrypoint
     image: '{{ $values.uploaders.image.repository }}:{{ $values.uploaders.image.tag }}'
+    imagePullPolicy: IfNotPresent
     name: s3
     resources: {}
     volumeMounts:

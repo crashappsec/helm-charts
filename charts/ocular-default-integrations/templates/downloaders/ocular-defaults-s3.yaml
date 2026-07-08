@@ -8,10 +8,13 @@ metadata:
   name: ocular-defaults-s3
 spec:
   container:
+    command:
+      - /entrypoint
     env:
       - name: AWS_CONFIG_FILE
         value: /ocular/aws/config
     image: '{{ $values.downloaders.image.repository }}:{{ $values.downloaders.image.tag }}'
+    imagePullPolicy: IfNotPresent
     name: s3
     resources: {}
     volumeMounts:

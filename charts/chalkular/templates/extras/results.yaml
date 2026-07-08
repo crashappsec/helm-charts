@@ -9,6 +9,8 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   container:
+    command:
+    - /entrypoint
     env:
     - name: CHALKULAR_INGEST_TOKEN
       valueFrom:
@@ -19,6 +21,13 @@ spec:
     image: {{ $values.uploader.image.repository }}:{{ $values.uploader.image.tag }}
     imagePullPolicy: {{ $values.uploader.image.pullPolicy }}
     name: results-extract
+    resources:
+      limits:
+        cpu: 500m
+        memory: 128Mi
+      requests:
+        cpu: 10m
+        memory: 64Mi
     volumeMounts: []
   parameters:
   - description: The S3 bucket to upload to
