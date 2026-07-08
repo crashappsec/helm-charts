@@ -8,6 +8,8 @@ metadata:
   name: ocular-defaults-gitlab
 spec:
   container:
+    command:
+      - /entrypoint
     env:
       - name: GITLAB_TOKEN
         valueFrom:
@@ -16,6 +18,7 @@ spec:
             name: "{{ $values.crawlers.secretName }}"
             optional: true
     image: '{{ $values.crawlers.image.repository }}:{{ $values.crawlers.image.tag }}'
+    imagePullPolicy: IfNotPresent
     name: gitlab
     resources: {}
   parameters:

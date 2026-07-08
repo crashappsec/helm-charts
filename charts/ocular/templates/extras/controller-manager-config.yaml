@@ -4,6 +4,8 @@
 ---
 apiVersion: v1
 data:
+  OCULAR_SCHEDULER_IMG: {{ $values.scheduler.image.repository }}:{{ $values.scheduler.image.tag }}
+  OCULAR_SCHEDULER_PULLPOLICY: {{ $values.scheduler.image.pullPolicy }}
   OCULAR_SEARCH_CLUSTER_ROLE: ocular-search-cluster-role
   OCULAR_SIDECAR_IMG: {{ $values.sidecar.image.repository }}:{{ $values.sidecar.image.tag }}
   OCULAR_SIDECAR_PULLPOLICY: {{ $values.sidecar.image.pullPolicy }}

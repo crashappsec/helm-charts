@@ -8,7 +8,10 @@ metadata:
   name: ocular-defaults-webhook
 spec:
   container:
+    command:
+      - /entrypoint
     image: '{{ $values.uploaders.image.repository }}:{{ $values.uploaders.image.tag }}'
+    imagePullPolicy: IfNotPresent
     name: webhook
     resources: {}
   parameters:

@@ -7,10 +7,13 @@ metadata:
   name: ocular-defaults-docker
 spec:
   container:
+    command:
+      - /entrypoint
     env:
       - name: DOCKER_CONFIG
         value: /ocular/docker
     image: '{{ $values.downloaders.image.repository }}:{{ $values.downloaders.image.tag }}'
+    imagePullPolicy: IfNotPresent
     name: docker
     resources: {}
     volumeMounts:

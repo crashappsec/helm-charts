@@ -7,6 +7,8 @@ metadata:
   name: ocular-defaults-dockerhub
 spec:
   container:
+    command:
+      - /entrypoint
     env:
       - name: DOCKERHUB_TOKEN
         valueFrom:
@@ -15,6 +17,7 @@ spec:
             name: "{{ $values.crawlers.secretName }}"
             optional: true
     image: '{{ $values.crawlers.image.repository }}:{{ $values.crawlers.image.tag }}'
+    imagePullPolicy: IfNotPresent
     name: dockerhub
     resources: {}
   parameters:

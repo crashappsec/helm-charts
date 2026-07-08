@@ -8,7 +8,10 @@ metadata:
   name: ocular-defaults-static-list
 spec:
   container:
+    command:
+      - /entrypoint
     image: '{{ $values.crawlers.image.repository }}:{{ $values.crawlers.image.tag }}'
+    imagePullPolicy: IfNotPresent
     name: static-list
     resources: {}
   parameters:

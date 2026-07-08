@@ -9,10 +9,19 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   container:
+    command:
+    - /entrypoint
     env: []
     image: {{ $values.downloader.image.repository }}:{{ $values.downloader.image.tag }}
     imagePullPolicy: {{ $values.downloader.image.pullPolicy }}
     name: chalkmark-extract
+    resources:
+      limits:
+        cpu: 500m
+        memory: 128Mi
+      requests:
+        cpu: 10m
+        memory: 64Mi
     volumeMounts: []
   metadataFiles:
   - chalk.json

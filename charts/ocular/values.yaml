@@ -118,3 +118,9 @@ sidecar:
     repository: ghcr.io/crashappsec/ocular-sidecar
     pullPolicy: IfNotPresent
     tag: v{{ .Chart.AppVersion }}
+# Configure Ocular scheduler image
+scheduler:
+  image:
+    repository: ghcr.io/crashappsec/ocular-scheduler
+    pullPolicy: IfNotPresent
+    tag: v{{ .Chart.AppVersion }}

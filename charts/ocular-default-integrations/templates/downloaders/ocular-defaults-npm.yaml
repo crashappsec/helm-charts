@@ -8,6 +8,9 @@ metadata:
   name: ocular-defaults-npm
 spec:
   container:
+    command:
+      - /entrypoint
     image: '{{ $values.downloaders.image.repository }}:{{ $values.downloaders.image.tag }}'
+    imagePullPolicy: IfNotPresent
     name: npm
     resources: {}
