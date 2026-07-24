@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chalk-operator-controller-manager
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+    control-plane: controller-manager
+spec:
+  replicas:  {{ .Values.controllerManager.replicas }}
+  selector:
+    matchLabels:
+      {{- include "chart.selectorLabels" . | nindent 6 }}
+      control-plane: controller-manager
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: manager
+      labels:
+        {{- include "chart.labels" . | nindent 8 }}
+        control-plane: controller-manager
+        {{- if and .Values.controllerManager.pod .Values.controllerManager.pod.labels }}
+        {{- range $key, $value := .Values.controllerManager.pod.labels }}
+        {{ $key }}: {{ $value }}
+        {{- end }}
+        {{- end }}
+    spec:
+      containers:
+        - name: manager
+          args:
+            {{- range .Values.controllerManager.container.args }}
+            - {{ . }}
+            {{- end }}
+            {{- if .Values.podmanifest.enable }}
+            - --podmanifest-bind-address=:{{ .Values.podmanifest.containerPort }}
+            {{- end }}
+          command:
+            - /manager
+          image: {{ .Values.controllerManager.container.image.repository }}:{{ .Values.controllerManager.container.image.tag }}
+          env:
+            {{- if .Values.controllerManager.container.env }}
+            {{- range $key, $value := .Values.controllerManager.container.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.chalk.clusterName }}
+            - name: CLUSTER_NAME
+              value: {{ .Values.chalk.clusterName | quote }}
+            {{- end }}
+            - name: ENABLE_CERT_MANAGER
+              value: {{ .Values.certmanager.enable | quote }}
+            {{- if .Values.webhook.enable }}
+            - name: WEBHOOK_CONFIG_NAME
+              value: {{ .Values.webhook.configurationName | default (printf "%s-mutating-webhook-configuration" (include "chart.fullname" .)) | quote }}
+            {{- end }}
+            {{- if .Values.podmanifest.enable }}
+            # Base URL the webhook templates into per-pod
+            # CHALK_K8S_PODMANIFEST_URL values.
+            - name: PODMANIFEST_SERVICE_URL
+              value: "http://chalk-operator-podmanifest.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.podmanifest.containerPort }}"
+            {{- end }}
+          livenessProbe:
+            {{- toYaml .Values.controllerManager.container.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.controllerManager.container.readinessProbe | nindent 12 }}
+          ports:
+            {{- if .Values.webhook.enable }}
+            - containerPort: 9443
+              name: webhook-server
+              protocol: TCP
+            {{- end }}
+            {{- if .Values.podmanifest.enable }}
+            - containerPort: {{ .Values.podmanifest.containerPort }}
+              name: podmanifest
+              protocol: TCP
+            {{- end }}
+          resources:
+            {{- toYaml .Values.controllerManager.container.resources | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.controllerManager.container.securityContext | nindent 12 }}
+          volumeMounts:
+            {{- if .Values.webhook.enable }}
+            - name: webhook-cert
+              mountPath: /etc/webhook/certs
+              readOnly: true
+            {{- end }}
+            {{- if and .Values.metrics.enable .Values.certmanager.enable }}
+            - name: metrics-certs
+              mountPath: /tmp/k8s-metrics-server/metrics-certs
+              readOnly: true
+            {{- end }}
+      securityContext:
+        {{- toYaml .Values.controllerManager.securityContext | nindent 8 }}
+      serviceAccountName: {{ .Values.controllerManager.serviceAccountName }}
+      terminationGracePeriodSeconds: {{ .Values.controllerManager.terminationGracePeriodSeconds }}
+      volumes:
+        {{- if .Values.webhook.enable }}
+        - name: webhook-cert
+          secret:
+            {{- if .Values.certmanager.enable }}
+            secretName: webhook-server-cert
+            {{- else }}
+            secretName: {{ include "chart.fullname" . }}-webhook-certs
+            {{- end }}
+        {{- end }}
+        {{- if and .Values.metrics.enable .Values.certmanager.enable }}
+        - name: metrics-certs
+          secret:
+            secretName: metrics-server-cert
+        {{- end }}

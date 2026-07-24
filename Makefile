@@ -12,9 +12,12 @@ OCULAR_DI_REPOSITORY_ROOT ?= ../ocular-default-integrations
 
 CHALKULAR_REPOSITORY_ROOT ?= ../chalkular
 
+CHALK_OPERATOR_REPOSITORY_ROOT ?= ../chalk-operator
+
 export OCULAR_VERSION
 export CHALKULAR_VERSION
 export OCULAR_DI_VERSION
+export CHALK_OPERATOR_VERSION
 
 ENV_FILE ?= .env
 
@@ -61,6 +64,10 @@ helm-package-ocular-default-integrations:
 helm-package-chalkular:
 	@$(MAKE) helm-package-chart-chalkular
 
+.PHONY: helm-package-chalk-operator
+helm-package-chalk-operator:
+	@$(MAKE) helm-package-chart-chalk-operator
+
 
 # Can push a helm artfiact to a OCI registry
 helm-push-chart-%: helm-package-chart-%
@@ -87,6 +94,10 @@ helm-push-ocular-default-integrations:
 helm-push-chalkular:
 	@$(MAKE) helm-push-chart-chalkular
 
+.PHONY: helm-push-chalk-operator
+helm-push-chalk-operator:
+	@$(MAKE) helm-push-chart-chalk-operator
+
 helm-generate-chart-%: yq
 	@hack/scripts/$*/generate.sh \
 		--repository ../$* \
@@ -104,6 +115,10 @@ helm-generate-ocular-default-integrations:
 .PHONY: helm-generate-chalkular
 helm-generate-chalkular:
 	@$(MAKE) helm-generate-chart-chalkular
+
+.PHONY: helm-generate-chalk-operator
+helm-generate-chalk-operator:
+	@$(MAKE) helm-generate-chart-chalk-operator
 
 
 ## Location to install dependencies to

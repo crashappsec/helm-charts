@@ -13,6 +13,7 @@ The charts are hosted using GitHub pages from the branch [`gh-pages`](../../tree
 | [`ocular`](/charts/ocular) | `v0.5.0`        | [Ocular](crashappsec/ocular) deployment | [Artifact Hub](https://artifacthub.io/packages/helm/crashoverride-helm-charts/ocular) |
 | [`ocular-default-integrations`](/charts/ocular-default-integrations) | `v0.2.0`        | [Ocular default integrations](crashappsec/ocular-default-integrations) deployment | [Artifact Hub](https://artifacthub.io/packages/helm/crashoverride-helm-charts/ocular-default-integrations) |
 | [`chalkular`](/charts/chalkular) | `v0.0.6`        | [Chalkular](crashappsec/chalkular) deployment | [Artifact Hub](https://artifacthub.io/packages/helm/crashoverride-helm-charts/chalkular) |
+| [`chalk-operator`](/charts/chalk-operator) | `v0.1.0`        | [Chalk Operator](crashappsec/chalk-operator) deployment | [Artifact Hub](https://artifacthub.io/packages/helm/crashoverride-helm-charts/chalk-operator) |
 
 ## Installing Charts
 
