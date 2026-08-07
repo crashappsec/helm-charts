@@ -4,7 +4,7 @@ controllerManager:
   container:
     image:
       repository: ghcr.io/crashappsec/chalk-operator
-      tag: v0.1.0
+      tag: v0.1.1
     args:
       - "--leader-elect"
       - "--metrics-bind-address=:8443"
@@ -82,8 +82,12 @@ certmanager:
   enable: false
 # [CHALK-OPERATOR]: Chalk-specific configuration
 chalk:
-  # Cluster name to inject into pods (CHALK_K8S_CLUSTER_NAME environment variable)
-  clusterName: "my-cluster"
+  # A cluster name you recognize. Passed to the operator as CLUSTER_NAME and
+  # recorded in CHALK_K8S_METADATA as cluster.user_provided_name, alongside the
+  # auto-detected name -- it does not override detection. Recommended,
+  # especially on clusters the operator cannot identify (detected name
+  # "unknown"). Left empty, the field is omitted entirely.
+  clusterName: ""
 # [PODMANIFEST]: HTTP endpoint exposing scrubbed pod specs to the pods
 # themselves. The operator templates the per-pod URL into chalked pods as
 # CHALK_K8S_PODMANIFEST_URL (the value already embeds the pod's own

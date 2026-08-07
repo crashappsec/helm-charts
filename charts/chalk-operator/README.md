@@ -39,7 +39,7 @@ helm install chalk-operator crashoverride/chalk-operator \
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `chalk.clusterName` | Cluster name included in the injected metadata | `"my-cluster"` |
+| `chalk.clusterName` | Optional cluster name, recorded alongside the auto-detected one. Empty means rely on detection — see [Cloud-aware metadata](#cloud-aware-metadata) | `""` |
 | `podmanifest.enable` | Enable the per-pod manifest endpoint | `true` |
 | `podmanifest.containerPort` | Port the manifest service listens on | `9000` |
 | `controllerManager.replicas` | Number of controller replicas | `2` |
@@ -51,8 +51,6 @@ helm install chalk-operator crashoverride/chalk-operator \
 | `controllerManager.container.resources.requests.cpu` | CPU request | `"10m"` |
 | `controllerManager.container.resources.requests.memory` | Memory request | `"64Mi"` |
 | `rbac.enable` | Enable RBAC resources | `true` |
-| `crd.enable` | Install CRDs | `true` |
-| `crd.keep` | Keep CRDs on uninstall | `true` |
 | `metrics.enable` | Enable metrics endpoint | `true` |
 | `webhook.enable` | Enable admission webhook | `true` |
 | `webhook.excludeOperatorNamespace` | Skip pods in the operator's own namespace | `false` |
@@ -115,9 +113,23 @@ For every annotated pod the operator:
 
 ### Cloud-aware metadata
 
-The operator auto-detects AWS (EKS), Azure (AKS), and GCP (GKE) and populates
-`CHALK_K8S_METADATA` with provider-specific details (cluster name, region,
-endpoint, …). Unknown environments fall back to a generic provider.
+At startup the operator inspects node provider IDs, node labels, and
+LoadBalancer service annotations to identify the cloud — AWS (EKS), GCP (GKE),
+or Azure (AKS), in that order — and populates `CHALK_K8S_METADATA` with
+provider-specific details (region, VPC / project / subscription, endpoint, …).
+Unrecognized environments fall back to a generic provider with no `cloud` block.
+
+The cluster name comes from the same sources: the `aws-node` DaemonSet or
+`*/cluster-name` node labels on EKS, `cloud.google.com/gke-cluster-name` on GKE,
+`kubernetes.azure.com/cluster` on AKS. Where none of those exist the name is
+reported as `"unknown"`. `cluster.uid` — the UID of the `kube-system` namespace —
+is always present and is the more reliable cluster identifier.
+
+Set `chalk.clusterName` to give the cluster a name you recognize. It is recorded
+as `cluster.user_provided_name` alongside whatever was detected — it does not
+override the detected name, but it is the only way to identify clusters where
+detection reports `"unknown"`. Detection happens once at startup, so restart the
+operator if any of these facts change.
 
 ## Examples
 
