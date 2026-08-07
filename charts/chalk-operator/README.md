@@ -1,146 +1,129 @@
 # Chalk Operator Helm Chart
 
-A Kubernetes operator that injects cluster metadata into pods marked with the `crashoverride.run/chalk: "true"` annotation.
+A Kubernetes operator that enriches pods with cluster and cloud metadata so that
+[Chalk](https://crashoverride.com/) (and anything else that reads the environment)
+can tell exactly where and how a container is running.
+
+The operator runs as a **mutating admission webhook**. When a pod is created with
+the `crashoverride.run/chalk` annotation (set directly on the pod or on its
+namespace), the operator enriches every container and init container in the pod
+with a set of `CHALK_K8S_*` environment variables and a projected service-account
+token used to authenticate to the pod-manifest endpoint. Pods without the
+annotation are left untouched.
 
 ## Installation
 
-### Prerequisites
-
-- Kubernetes 1.19+
-- Helm 3.12+
-
-### Quick Start
-
 ```bash
-# Generate the chart from operator manifests
-make helm-chart
+helm repo add crashoverride https://crashappsec.github.io/helm-charts
+helm repo update crashoverride
 
-# Install the operator
-helm install chalk-operator ./dist/chart \
-  --create-namespace \
-  --namespace chalk-operator-system
+helm install chalk-operator crashoverride/chalk-operator \
+  --namespace chalk-operator-system \
+  --create-namespace
 ```
 
-### Installation Options
+The image is published to GitHub Container Registry
+(`ghcr.io/crashappsec/chalk-operator`) for `linux/amd64`, `linux/arm64`,
+`linux/s390x`, and `linux/ppc64le`.
 
-#### Default Installation (Self-Signed Certificates)
-```bash
-helm install chalk-operator ./dist/chart \
-  --create-namespace \
-  --namespace chalk-operator-system
-```
+### With cert-manager
 
-#### With cert-manager Integration
 ```bash
-# If you have cert-manager installed
-helm install chalk-operator ./dist/chart \
+helm install chalk-operator crashoverride/chalk-operator \
   --create-namespace \
   --namespace chalk-operator-system \
   --set certmanager.enable=true
 ```
 
-#### Custom Configuration
-```bash
-helm install chalk-operator ./dist/chart \
-  --create-namespace \
-  --namespace chalk-operator-system \
-  --set chalk.clusterName="production" \
-  --set controllerManager.replicas=2 \
-  --set prometheus.enable=true
-```
-
 ## Configuration
 
-The following table lists the configurable parameters of the Chalk Operator chart and their default values.
-
-### Core Configuration
-
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `chalk.clusterName` | Cluster name injected into pods | `"my-cluster"` |
-
-### Controller Manager
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `controllerManager.replicas` | Number of controller replicas | `1` |
+| `chalk.clusterName` | Cluster name included in the injected metadata | `"my-cluster"` |
+| `podmanifest.enable` | Enable the per-pod manifest endpoint | `true` |
+| `podmanifest.containerPort` | Port the manifest service listens on | `9000` |
+| `controllerManager.replicas` | Number of controller replicas | `2` |
 | `controllerManager.container.image.repository` | Controller image repository | `"controller"` |
 | `controllerManager.container.image.tag` | Controller image tag | `"latest"` |
-| `controllerManager.container.env` | Environment variables | `{}` |
+| `controllerManager.container.env` | Environment variables for the controller | `{}` |
 | `controllerManager.container.resources.limits.cpu` | CPU limit | `"500m"` |
 | `controllerManager.container.resources.limits.memory` | Memory limit | `"128Mi"` |
 | `controllerManager.container.resources.requests.cpu` | CPU request | `"10m"` |
 | `controllerManager.container.resources.requests.memory` | Memory request | `"64Mi"` |
-
-### Features
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
 | `rbac.enable` | Enable RBAC resources | `true` |
 | `crd.enable` | Install CRDs | `true` |
 | `crd.keep` | Keep CRDs on uninstall | `true` |
 | `metrics.enable` | Enable metrics endpoint | `true` |
 | `webhook.enable` | Enable admission webhook | `true` |
-| `webhook.excludeOperatorNamespace` | Exclude operator namespace from processing | `false` |
-| `prometheus.enable` | Enable Prometheus ServiceMonitor | `false` |
-| `certmanager.enable` | Use cert-manager for certificates | `false` |
+| `webhook.excludeOperatorNamespace` | Skip pods in the operator's own namespace | `false` |
+| `prometheus.enable` | Create a `ServiceMonitor` for metrics scraping | `false` |
+| `certmanager.enable` | Use cert-manager for webhook certs (self-signed if `false`) | `false` |
 | `networkPolicy.enable` | Enable NetworkPolicies | `false` |
 
-### Certificate Management
+See [`values.yaml`](values.yaml) for the full list.
 
-Certificate management is controlled by the `certmanager.enable` setting:
+### Certificate management
 
-- **`certmanager.enable: true`**: Operator attempts to use cert-manager. If cert-manager CRDs are not available, automatically falls back to self-signed certificates.
-- **`certmanager.enable: false`** (default): Operator always uses self-signed certificates.
+- **`certmanager.enable: false`** (default): self-signed certificates are
+  generated via Helm hooks.
+- **`certmanager.enable: true`**: cert-manager `Certificate` and `Issuer`
+  resources are created. If cert-manager CRDs are not present the operator
+  falls back to self-signed certificates automatically.
 
 ## Usage
 
-Once installed, the operator will automatically inject metadata into pods with the chalk annotation:
+Instrument a whole namespace — all new pods in the namespace are enriched:
+
+```bash
+kubectl annotate namespace my-app crashoverride.run/chalk=true
+```
+
+Or opt in a single workload via its pod template:
 
 ```yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: my-app
-  annotations:
-    crashoverride.run/chalk: "true"
 spec:
-  containers:
-  - name: app
-    image: nginx
+  template:
+    metadata:
+      annotations:
+        crashoverride.run/chalk: "true"   # also accepts "enabled"
 ```
 
-The operator injects these environment variables:
-- `CHALK_K8S_METADATA` - JSON object containing all metadata
-- `CHALK_K8S_POD_NAME` - Pod name (via Downward API)
-- `CHALK_K8S_NODE_NAME` - Node name (via Downward API)
+The webhook only fires on pod **creation**. Restart or roll existing pods to
+enrich them. A pod-level annotation takes precedence over the namespace
+annotation.
 
-The `CHALK_K8S_METADATA` contains a JSON structure like:
-```json
-{
-  "cluster": {
-    "name": "my-cluster",
-    "uid": "cluster-uid",
-    "endpoint": "https://api.cluster.example.com"
-  },
-  "pod": {
-    "namespace": "default",
-    "labels": {"app": "myapp"},
-    "annotations": {"key": "value"}
-  },
-  "cloud": {
-    "provider": "aws",
-    "region": "us-west-2",
-    "vpc_id": "vpc-12345"
-  }
-}
-```
+### What gets injected
+
+For every annotated pod the operator:
+
+1. Adds the following environment variables to every container and init container:
+
+| Variable | Description |
+|----------|-------------|
+| `CHALK_K8S_METADATA` | JSON blob of cluster/cloud metadata (provider, cluster name, region, labels, annotations, …) |
+| `CHALK_K8S_POD_NAME` | Pod name (Downward API) |
+| `CHALK_K8S_POD_NAMESPACE` | Pod namespace (Downward API) |
+| `CHALK_K8S_NODE_NAME` | Node the pod is scheduled on (Downward API) |
+| `CHALK_K8S_CONTAINER_NAME` | Name of the specific container the variable is added to |
+| `CHALK_K8S_PODMANIFEST_URL` | Per-pod URL of the scrubbed pod-manifest endpoint (injected only when `podmanifest.enable=true`) |
+| `CHALK_K8S_PODMANIFEST_TOKEN_PATH` | Path to the projected SA token used to authenticate to that endpoint |
+
+2. Mounts a projected service-account token at
+   `/var/run/secrets/chalk.crashoverride.run/token` (audience:
+   `podmanifest.crashoverride.run`) so the pod can authenticate to the
+   pod-manifest endpoint even when `automountServiceAccountToken: false`.
+
+### Cloud-aware metadata
+
+The operator auto-detects AWS (EKS), Azure (AKS), and GCP (GKE) and populates
+`CHALK_K8S_METADATA` with provider-specific details (cluster name, region,
+endpoint, …). Unknown environments fall back to a generic provider.
 
 ## Examples
 
-### Production Configuration
+### Production values file
+
 ```yaml
-# values-production.yaml
 chalk:
   clusterName: "production-cluster"
 
@@ -166,35 +149,16 @@ networkPolicy:
 ```
 
 ```bash
-helm install chalk-operator ./dist/chart \
+helm install chalk-operator crashoverride/chalk-operator \
   --namespace chalk-operator-system \
   --create-namespace \
   --values values-production.yaml
 ```
 
-### Development Configuration
-```yaml
-# values-dev.yaml
-chalk:
-  clusterName: "dev-cluster"
+### Custom image
 
-controllerManager:
-  container:
-    image:
-      tag: "dev"
-    env:
-      LOG_LEVEL: "debug"
-
-metrics:
-  enable: false
-
-certmanager:
-  enable: false
-```
-
-### Custom Image
 ```bash
-helm install chalk-operator ./dist/chart \
+helm install chalk-operator crashoverride/chalk-operator \
   --set controllerManager.container.image.repository="my-registry/chalk-operator" \
   --set controllerManager.container.image.tag="v1.0.0" \
   --namespace chalk-operator-system \
@@ -204,81 +168,56 @@ helm install chalk-operator ./dist/chart \
 ## Upgrading
 
 ```bash
-# Update chart
-make helm-chart
-
-# Upgrade release
-helm upgrade chalk-operator ./dist/chart -n chalk-operator-system
+helm repo update crashoverride
+helm upgrade chalk-operator crashoverride/chalk-operator -n chalk-operator-system
 ```
 
 ## Uninstalling
 
 ```bash
-# Remove the release
 helm uninstall chalk-operator -n chalk-operator-system
-
-# Optionally remove the namespace
 kubectl delete namespace chalk-operator-system
 ```
 
 **Note:** CRDs are kept by default (`crd.keep: true`). To remove them:
+
 ```bash
 kubectl delete crd $(kubectl get crd -o name | grep chalk-operator)
 ```
 
 ## Troubleshooting
 
-### Common Issues
+### Webhook admission failures
 
-#### Webhook Admission Failures
 ```bash
-# Check webhook configuration
 kubectl get mutatingwebhookconfiguration
 kubectl describe mutatingwebhookconfiguration chalk-operator-mutating-webhook-configuration
-
-# Check operator logs
 kubectl logs -n chalk-operator-system deployment/chalk-operator-controller-manager
 ```
 
-#### Certificate Issues
+### Certificate issues
+
 ```bash
-# For cert-manager issues
+# cert-manager
 kubectl get certificates -n chalk-operator-system
 kubectl describe certificate chalk-operator-serving-cert -n chalk-operator-system
 
-# For self-signed certificate issues
+# self-signed
 kubectl logs -n chalk-operator-system deployment/chalk-operator-controller-manager | grep -i cert
 ```
 
-#### Pod Not Being Modified
+### Pod not being mutated
+
 ```bash
-# Verify webhook is registered
+# Verify the webhook is registered
 kubectl get mutatingwebhookconfiguration chalk-operator-mutating-webhook-configuration -o yaml
 
-# Check if pod has the correct annotation
+# Check the annotation is present
 kubectl get pod <pod-name> -o yaml | grep crashoverride.run/chalk
 
-# Test with example pod
-kubectl apply -f examples/test-pod.yaml
-kubectl get pod test-chalk-pod -o jsonpath='{.spec.containers[0].env}'
+# Check the operator processed the pod
+kubectl logs -n chalk-operator-system deployment/chalk-operator-controller-manager
 ```
-
-### Debug Mode
-```bash
-# Enable debug logging
-helm upgrade chalk-operator ./dist/chart \
-  --set controllerManager.container.env.LOG_LEVEL="debug" \
-  -n chalk-operator-system
-```
-
-## Contributing
-
-For chart development:
-
-1. Make changes to the operator manifests in `config/`
-2. Run `make helm-chart` to regenerate the chart
-3. Test with `helm template` and `helm install --dry-run`
-4. Update this README if needed
 
 ## License
 
