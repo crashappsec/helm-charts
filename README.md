@@ -4,16 +4,16 @@
 
 This repository provides any public facing helm charts for projects managed by [CrashOverride](https://crashoverride.com/).
 
-The charts are hosted using GitHub pages from the branch [`gh-pages`](../../tree/gh-pages)
+The charts are hosted using GitHub pages from the branch [`gh-pages`](https://github.com/crashappsec/helm-charts/tree/gh-pages)
 
 ## Available Charts
 
-| Chart                      | Current Version | Description                             | Documentation      |
-|----------------------------|-----------------|-----------------------------------------|--------------------|
-| [`ocular`](/charts/ocular) | `v0.5.0`        | [Ocular](crashappsec/ocular) deployment | [Artifact Hub](https://artifacthub.io/packages/helm/crashoverride-helm-charts/ocular) |
-| [`ocular-default-integrations`](/charts/ocular-default-integrations) | `v0.2.0`        | [Ocular default integrations](crashappsec/ocular-default-integrations) deployment | [Artifact Hub](https://artifacthub.io/packages/helm/crashoverride-helm-charts/ocular-default-integrations) |
-| [`chalkular`](/charts/chalkular) | `v0.0.6`        | [Chalkular](crashappsec/chalkular) deployment | [Artifact Hub](https://artifacthub.io/packages/helm/crashoverride-helm-charts/chalkular) |
-| [`chalk-operator`](/charts/chalk-operator) | `v0.1.0`        | [Chalk Operator](crashappsec/chalk-operator) deployment | [Artifact Hub](https://artifacthub.io/packages/helm/crashoverride-helm-charts/chalk-operator) |
+| Chart                                                                                                                    | Current Version | Repo                                                                                                  | Documentation                                                                                              |
+| ------------------------------------------------------------------------------------------------------------------------ | --------------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| [`ocular`](https://github.com/crashappsec/helm-charts/tree/main/charts/ocular)                                           | `v0.5.0`        | [crashappsec/ocular](https://github.com/crashappsec/ocular)                                           | [Artifact Hub](https://artifacthub.io/packages/helm/crashoverride-helm-charts/ocular)                      |
+| [`ocular-default-integrations`](https://github.com/crashappsec/helm-charts/tree/main/charts/ocular-default-integrations) | `v0.2.0`        | [crashappsec/ocular-default-integrations](https://github.com/crashappsec/ocular-default-integrations) | [Artifact Hub](https://artifacthub.io/packages/helm/crashoverride-helm-charts/ocular-default-integrations) |
+| [`chalkular`](https://github.com/crashappsec/helm-charts/tree/main/charts/chalkular)                                     | `v0.0.6`        | [crashappsec/chalkular](https://github.com/crashappsec/chalkular)                                     | [Artifact Hub](https://artifacthub.io/packages/helm/crashoverride-helm-charts/chalkular)                   |
+| [`chalk-operator`](https://github.com/crashappsec/helm-charts/tree/main/charts/chalk-operator)                           | `v0.1.0`        | [Charts README](https://github.com/crashappsec/helm-charts/blob/main/charts/chalk-operator/README.md) | [Artifact Hub](https://artifacthub.io/packages/helm/crashoverride-helm-charts/chalk-operator)              |
 
 ## Installing Charts
 
@@ -27,4 +27,3 @@ helm install ocular crashoverride/ocular \
 	--namespace ocular-system \
 	--create-namespace
 ```
-
