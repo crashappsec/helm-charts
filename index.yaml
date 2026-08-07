@@ -5,6 +5,32 @@ entries:
       artifacthub.io/category: security
       artifacthub.io/license: GPL-3.0
     apiVersion: v2
+    appVersion: 0.1.1
+    created: "2026-08-07T14:47:09.292504279Z"
+    description: A Kubernetes operator that enriches chalk-annotated pods with cluster
+      metadata
+    digest: 6972aabb1543ae667f5cbea414f2dabe7fc99e3ee7ac707fac78dde9e43e4eb4
+    home: https://github.com/crashappsec/chalk-operator
+    keywords:
+    - kubernetes
+    - operator
+    - metadata
+    - enrichment
+    - webhook
+    maintainers:
+    - email: info@crashoverride.run
+      name: Crash Override
+    name: chalk-operator
+    sources:
+    - https://github.com/crashappsec/chalk-operator
+    type: application
+    urls:
+    - chalk-operator-0.1.1.tgz
+    version: 0.1.1
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/license: GPL-3.0
+    apiVersion: v2
     appVersion: 0.1.0
     created: "2026-08-07T13:41:02.043125311Z"
     description: A Kubernetes operator that injects cluster metadata into pods marked
@@ -863,4 +889,4 @@ entries:
     urls:
     - ocular-default-integrations-0.1.0.tgz
     version: 0.1.0
-generated: "2026-08-07T13:41:02.043185266Z"
+generated: "2026-08-07T14:47:09.292572677Z"
