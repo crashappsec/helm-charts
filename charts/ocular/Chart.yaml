@@ -1,7 +1,7 @@
 apiVersion: v2 # -*- yaml -*-
 name: ocular
 version: 0.5.1
-appVersion: 0.4.0
+appVersion: 0.4.1
 kubeVersion: ">=1.26.0-0"
 description: An API for mass scanning static software assets
 type: application
