@@ -58,6 +58,34 @@ entries:
       artifacthub.io/category: security
       artifacthub.io/license: GPL-3.0
     apiVersion: v2
+    appVersion: 0.0.8
+    created: "2026-08-18T18:00:29.805208545Z"
+    description: Chalkular allows for chalk reports to trigger Ocular pipelines
+    digest: 26e785aa85f68b33e64a128be647cb49b7c56fedb1206eb412e32bb860e4b8ea
+    home: https://ocularproject.io
+    icon: https://ocularproject.io/favicon-32x32.png
+    keywords:
+    - git
+    - kubernetes
+    - scanning
+    - sast
+    - secrets
+    - sca
+    - security
+    maintainers:
+    - email: bryce@crashoverride.com
+      name: Bryce Thuiot
+    name: chalkular
+    sources:
+    - https://github.com/crashappsec/chalkular
+    type: application
+    urls:
+    - chalkular-0.0.8.tgz
+    version: 0.0.8
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/license: GPL-3.0
+    apiVersion: v2
     appVersion: 0.0.7
     created: "2026-07-08T13:48:54.663273-04:00"
     description: Chalkular allows for chalk reports to trigger Ocular pipelines
@@ -234,6 +262,35 @@ entries:
     - chalkular-0.0.1.tgz
     version: 0.0.1
   ocular:
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/license: GPL-3.0
+    apiVersion: v2
+    appVersion: 0.4.1
+    created: "2026-08-18T18:00:29.960226766Z"
+    description: An API for mass scanning static software assets
+    digest: 467f7999b16a58f2e3b3d0b5ddb74031a9d0c6f89f80235efde14d4648bef314
+    home: https://ocularproject.io
+    icon: https://ocularproject.io/favicon-32x32.png
+    keywords:
+    - git
+    - kubernetes
+    - scanning
+    - sast
+    - secrets
+    - sca
+    - security
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: bryce@crashoverride.com
+      name: Bryce Thuiot
+    name: ocular
+    sources:
+    - https://github.com/crashappsec/ocular
+    type: application
+    urls:
+    - ocular-0.5.2.tgz
+    version: 0.5.2
   - annotations:
       artifacthub.io/category: security
       artifacthub.io/license: GPL-3.0
@@ -889,4 +946,4 @@ entries:
     urls:
     - ocular-default-integrations-0.1.0.tgz
     version: 0.1.0
-generated: "2026-08-07T14:47:09.292572677Z"
+generated: "2026-08-18T18:00:29.960350237Z"
